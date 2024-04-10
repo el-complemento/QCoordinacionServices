@@ -1,0 +1,27 @@
+services:
+  qcoordinacion-database:
+    container_name: qc-database
+    image: mysql:8.0.3
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: 'QCoordinacionDatabase'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: ${SPRING_APPLICATION_MYSQL_USER}
+      # You can use whatever password you like
+      MYSQL_PASSWORD: ${SPRING_APPLICATION_MYSQL_PASSWORD}
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: ${SPRING_APPLICATION_MYSQL_ROOT_PASSWORD}
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - qcoordinacion-database:/var/lib/mysql
+# Names our volume
+volumes:
+  qcoordinacion-database:
