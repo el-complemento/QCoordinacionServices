@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrdenRequest {
-    private Long ordenId;
+    private Long numeroOrden;
     private Long pacienteId;
     private String codigoTerminologia;
 }

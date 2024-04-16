@@ -1,4 +1,4 @@
-package com.ingsoftware.qc_receptor_ordenes_service.service;
+package com.ingsoftware.qc_receptor_ordenes_service.services;
 
 import com.ingsoftware.qc_receptor_ordenes_service.controllers.dto.UserDTO;
 import org.keycloak.representations.idm.UserRepresentation;

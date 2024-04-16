@@ -1,6 +1,5 @@
 package com.ingsoftware.qc_receptor_ordenes_service.model.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,17 +12,17 @@ import lombok.*;
 @Builder
 public class Orden {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String numeroOrden;
     private Long pacienteId;
     private String codigoTerminologia;
 
     @Override
     public String toString() {
         return "Orden{" +
-                "id=" + id +
+                "numeroOrden=" + numeroOrden +
                 ", pacienteId=" + pacienteId +
                 ", codigoTerminologia='" + codigoTerminologia + '\'' +
                 '}';
     }
 }
+
