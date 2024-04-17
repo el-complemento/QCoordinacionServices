@@ -11,12 +11,12 @@ import org.keycloak.admin.client.resource.UsersResource;
 
 public class KeycloakProvider {
     private static final String SERVER_URL = "http://localhost:8181";
-    private static final String REALM_NAME = "spring-client-api-rest";
+    private static final String REALM_NAME = "QCoordinacion";
     private static final String REALM_MASTER = "master";
     private static final String ADMIN_CLI= "admin-cli";
     private static final String USER_CONSOLE = "admin";
     private static final String PASSWORD_CONSOLE = "admin";
-    private static final String CLIENT_SECRET = "Q6RvYfhheVDTwrmljIexLrvTalCWyXS1";
+    private static final String CLIENT_SECRET = "tbNUYZ9i5U9oGGlUxrsSmocN5LqXBtxW";
 
     public static RealmResource getRealmResource(){
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(SERVER_URL).realm(REALM_MASTER).clientId(ADMIN_CLI).username(USER_CONSOLE).password(PASSWORD_CONSOLE).clientSecret(CLIENT_SECRET).resteasyClient(new ResteasyClientBuilderImpl().connectionPoolSize(10).build()).build();
