@@ -24,14 +24,16 @@ public class OrdenController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Orden> getOrdenById(@PathVariable String id) {
         return ordenService.getOrdenById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "*")
     public List<Orden> getAllOrdenes() {
         return ordenService.getAllOrdenes();
     }
