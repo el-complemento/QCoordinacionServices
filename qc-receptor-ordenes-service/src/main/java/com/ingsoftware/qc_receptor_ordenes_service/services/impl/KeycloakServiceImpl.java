@@ -1,6 +1,5 @@
 package com.ingsoftware.qc_receptor_ordenes_service.services.impl;
 
-import com.ingsoftware.qc_receptor_ordenes_service.controllers.dto.UserDTO;
 import com.ingsoftware.qc_receptor_ordenes_service.services.IKeycloakService;
 import org.keycloak.representations.idm.UserRepresentation;
 
