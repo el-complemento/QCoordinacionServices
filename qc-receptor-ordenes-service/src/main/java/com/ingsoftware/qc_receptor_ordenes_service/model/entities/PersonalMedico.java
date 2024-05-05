@@ -12,7 +12,7 @@ import lombok.*;
 public class PersonalMedico {
     public enum Rol{Enfermero,Cirujano,Anestecista}
     @Id
-    private Long DNI;
+    private Long cedula;
     private String nombre;
     private String apellido;
     private Rol rol;
@@ -20,7 +20,7 @@ public class PersonalMedico {
     @Override
     public String toString() {
         return "PersonalMedico{" +
-                "Cedula=" + DNI +
+                "Cedula=" + cedula +
                 ", Rol=" + rol +
                 ", Apellido=" + apellido +
                 ", nombre='" + nombre + '\'' +

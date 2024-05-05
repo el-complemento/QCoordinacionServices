@@ -17,7 +17,7 @@ public class Cirugia {
     private Long idCirugia;
     private Estado estado;
     private Date fecha;
-    private int numeroQuirofano;
+    private Integer numeroQuirofano;
     @OneToMany
     private List<PersonalMedico> medicos;
     private String numeroOrdenAsociada;

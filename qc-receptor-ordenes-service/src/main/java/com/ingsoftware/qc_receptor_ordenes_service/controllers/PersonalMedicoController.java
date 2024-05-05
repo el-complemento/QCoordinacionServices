@@ -28,10 +28,10 @@ public class PersonalMedicoController {
     public List<PersonalMedico> getAllPersonalMedico() {
         return personalMedicoService.getAllPersonalMedico();
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{cedula}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> deletePersonalMedico(@PathVariable Long dni) {
-        personalMedicoService.deletePersonalMedico(dni);
+    public ResponseEntity<Void> deletePersonalMedico(@PathVariable Long cedula) {
+        personalMedicoService.deletePersonalMedico(cedula);
         return ResponseEntity.ok().build();
     }
 }

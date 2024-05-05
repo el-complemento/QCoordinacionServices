@@ -42,4 +42,10 @@ public class CirugiaController {
         cirugiaService.deleteCirugia(id);
         return ResponseEntity.ok().build();
     }
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> deleteAllCirugias() {
+        cirugiaService.deleteAllCirugias();
+        return ResponseEntity.ok().build();
+    }
     }

@@ -31,6 +31,9 @@ public class CirugiaService {
     public void deleteCirugia(Long id) {
         cirugiaRepository.deleteById(id);
     }
+    public void deleteAllCirugias() {
+        cirugiaRepository.deleteAll();
+    }
 
     // Aquí puedes añadir más métodos según la lógica de tu negocio
 }
