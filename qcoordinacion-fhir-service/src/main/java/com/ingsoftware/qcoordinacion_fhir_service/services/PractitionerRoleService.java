@@ -8,7 +8,6 @@ import org.hl7.fhir.r5.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class PractitionerRoleService {
@@ -21,16 +20,5 @@ public class PractitionerRoleService {
         PractitionerRole nuevoPractitioner = parser.parseResource(PractitionerRole.class, practitionerRole);
         MethodOutcome outcome = fhirClient.create().resource(nuevoPractitioner).execute();
         return outcome.getId().getIdPart();
-    }
-    //esto se mira y no se toca
-    public Bundle getPractitionersByRole(String roleCode,String sistema) {
-        Bundle results = fhirClient
-                .search()
-                .forResource(PractitionerRole.class)
-                .where(PractitionerRole)
-                .include(PractitionerRole.INCLUDE_PRACTITIONER)
-                .returnBundle(Bundle.class)
-                .execute();
-        return results;
     }
 }

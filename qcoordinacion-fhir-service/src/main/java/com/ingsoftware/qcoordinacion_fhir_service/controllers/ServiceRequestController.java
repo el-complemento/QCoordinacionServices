@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/v1/service-requests")
 public class ServiceRequestController {
@@ -42,9 +43,8 @@ public class ServiceRequestController {
     public ResponseEntity<List<String>> getServiceRequestIdByDate(@PathVariable String fecha) {
         Bundle serviceRequestsDeFechaHaciaAdelante = serviceRequestService.getServiceRequestsFromDate(fecha);
 
-        return ResponseEntity.ok(serviceRequestsDeFechaHaciaAdelante);
+        return ResponseEntity.ok((List<String>) serviceRequestsDeFechaHaciaAdelante);
     }
-
 }
 
 

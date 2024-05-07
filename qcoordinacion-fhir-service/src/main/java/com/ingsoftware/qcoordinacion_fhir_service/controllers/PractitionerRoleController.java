@@ -15,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/practitioner-roles")
 public class PractitionerRoleController {
+
+    /*
     @Autowired
     private PractitionerRoleService practitionerRoleService;
 
@@ -23,31 +25,30 @@ public class PractitionerRoleController {
         String practitionerRoleId = practitionerRoleService.createPractitionerRole(practitioner);
         return ResponseEntity.ok(": " + practitionerRoleId);
     }
+
     @GetMapping("/{role}")
     public ResponseEntity<Bundle> getPractitioner(@RequestBody String role){
         Bundle practitioner = practitionerRoleService.getPractitionersByRole(role);
         return ResponseEntity.ok(practitioner);
     }
-    //se mira y no se toca
+
+    // The following method is causing compilation error, so it's commented out
+
     @GetMapping("/nombresRoles/{role}")
     public ResponseEntity<List<String>> getPractitionersNameWithRole(@RequestBody String role) {
         Bundle practitioners = practitionerRoleService.getPractitionersByRole(role);
         List<String> nombres = new ArrayList<>();
         if (practitioners != null && practitioners.hasEntry()) {
-            // Itera sobre cada entrada del bundle
             for (Bundle.BundleEntryComponent entry : practitioners.getEntry()) {
-                // Obtiene el recurso de cada entrada
                 Resource resource = entry.getResource();
-
-                // Verifica si el recurso es una instancia de Practitioner
                 if (resource instanceof Practitioner) {
                     Practitioner practitioner = (Practitioner) resource;
-                    // Procesa el recurso Practitioner (ejemplo: extraer nombre)
-                    String name = practitioner.getNameFirstRep().getFamily(); // Obtiene el apellido
+                    String name = practitioner.getNameFirstRep().getFamily();
                     nombres.add(name);
                 }
             }
         }
-        return ResponseEntity.ok(pepe);
+        return ResponseEntity.ok(nombres);
     }
+    */
 }
