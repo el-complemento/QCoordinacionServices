@@ -23,14 +23,13 @@ public class PractitionerRoleService {
         return outcome.getId().getIdPart();
     }
     //esto se mira y no se toca
-    public Bundle getPractitionersByRole(String roleCode,String sistema) {
-        Bundle results = fhirClient
+    public Bundle getPractitionersByRole(String roleCode, String system) {
+        system = "http://terminology.hl7.org/CodeSystem/".concat(system);
+        return fhirClient
                 .search()
                 .forResource(PractitionerRole.class)
-                .where(PractitionerRole)
+                .where(PractitionerRole.ROLE.exactly().systemAndCode(system, roleCode))
                 .include(PractitionerRole.INCLUDE_PRACTITIONER)
                 .returnBundle(Bundle.class)
                 .execute();
-        return results;
-    }
-}
+    }}

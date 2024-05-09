@@ -1,14 +1,16 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
 
 import com.ingsoftware.qcoordinacion_fhir_service.services.PractitionerRoleService;
+import jakarta.websocket.server.PathParam;
 import org.hl7.fhir.r5.model.Bundle;
-import org.hl7.fhir.r5.model.HumanName;
+import java.net.URLDecoder;
 import org.hl7.fhir.r5.model.Practitioner;
 import org.hl7.fhir.r5.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,31 +25,25 @@ public class PractitionerRoleController {
         String practitionerRoleId = practitionerRoleService.createPractitionerRole(practitioner);
         return ResponseEntity.ok(": " + practitionerRoleId);
     }
-    @GetMapping("/{role}")
-    public ResponseEntity<Bundle> getPractitioner(@RequestBody String role){
-        Bundle practitioner = practitionerRoleService.getPractitionersByRole(role);
+    @GetMapping("/{system}/{role}")
+    public ResponseEntity<Bundle> getPractitioner(@PathVariable String system, @PathVariable String role) {
+        Bundle practitioner = practitionerRoleService.getPractitionersByRole(role, system);
         return ResponseEntity.ok(practitioner);
     }
-    //se mira y no se toca
-    @GetMapping("/nombresRoles/{role}")
-    public ResponseEntity<List<String>> getPractitionersNameWithRole(@RequestBody String role) {
-        Bundle practitioners = practitionerRoleService.getPractitionersByRole(role);
+    @GetMapping("/nombresRoles/{system}/{role}")
+    public ResponseEntity<List<String>> getPractitionersNameWithRole(@PathVariable String system,@PathVariable String role) {
+        Bundle practitioners = practitionerRoleService.getPractitionersByRole(role,system);
         List<String> nombres = new ArrayList<>();
         if (practitioners != null && practitioners.hasEntry()) {
-            // Itera sobre cada entrada del bundle
             for (Bundle.BundleEntryComponent entry : practitioners.getEntry()) {
-                // Obtiene el recurso de cada entrada
                 Resource resource = entry.getResource();
-
-                // Verifica si el recurso es una instancia de Practitioner
                 if (resource instanceof Practitioner) {
                     Practitioner practitioner = (Practitioner) resource;
-                    // Procesa el recurso Practitioner (ejemplo: extraer nombre)
                     String name = practitioner.getNameFirstRep().getFamily(); // Obtiene el apellido
                     nombres.add(name);
                 }
-            }
+           }
         }
-        return ResponseEntity.ok(pepe);
+        return ResponseEntity.ok(nombres);
     }
 }

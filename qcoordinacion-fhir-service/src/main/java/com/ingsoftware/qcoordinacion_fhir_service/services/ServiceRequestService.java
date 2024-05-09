@@ -5,6 +5,7 @@ import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.DateClientParam;
 import org.hl7.fhir.r5.model.Bundle;
+import org.hl7.fhir.r5.model.Enumerations;
 import org.hl7.fhir.r5.model.ServiceRequest;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,38 @@ public class ServiceRequestService {
                 .where(new DateClientParam("authored").afterOrEquals().day(date))
                 .returnBundle(Bundle.class)
                 .execute();
+    }
+    public ServiceRequest markServiceRequestAsCompleted(String id) {
+        ServiceRequest serviceRequest = getServiceRequestById(id);
+        if(!serviceRequest.hasBasedOn()){
+        serviceRequest.setStatus(Enumerations.RequestStatus.COMPLETED);
+        MethodOutcome outcome = fhirClient.update().resource(serviceRequest).execute();
+        return (ServiceRequest) outcome.getResource();
+        }
+        else{
+            Boolean todasSubOrdenesCompletadas= true;
+            serviceRequest.setStatus(Enumerations.RequestStatus.COMPLETED);
+            MethodOutcome outcome = fhirClient.update().resource(serviceRequest).execute();
+            String idOrdenPadre = serviceRequest.getBasedOn().get(0).getId();
+            Bundle subOrdenes = fhirClient.search().forResource(ServiceRequest.class)
+                    .where(ServiceRequest.BASED_ON.hasId(idOrdenPadre))
+                    .returnBundle(Bundle.class)
+                    .execute();
+            for (Bundle.BundleEntryComponent entry : subOrdenes.getEntry()) {
+                if (entry.getResource() instanceof ServiceRequest) {
+                    ServiceRequest orden = (ServiceRequest) entry.getResource();
+                    if(!orden.getStatus().equals(Enumerations.RequestStatus.COMPLETED)){
+                        todasSubOrdenesCompletadas=false;
+                    }
+                }
+            }
+            if(todasSubOrdenesCompletadas){
+                getServiceRequestById(idOrdenPadre).setStatus(Enumerations.RequestStatus.ACTIVE);
+                MethodOutcome outcome2 = fhirClient.update().resource(serviceRequest).execute();
+            }
+            return (ServiceRequest) outcome.getResource();
+        }
+
     }
 }
 
