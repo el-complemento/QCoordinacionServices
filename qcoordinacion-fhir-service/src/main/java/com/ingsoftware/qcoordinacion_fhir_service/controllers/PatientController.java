@@ -22,7 +22,7 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<String> createPatient(@RequestBody String patient) {
         String patientId = patientService.createPatient(patient);
-        return ResponseEntity.ok("Patient created with ID: " + patientId);
+        return ResponseEntity.ok(patientId);
     }
 
     @GetMapping("/{id}")
@@ -32,11 +32,12 @@ public class PatientController {
     }
     @GetMapping("/nombre/{id}")
     public ResponseEntity<String> getPatientNombre(@PathVariable String id) {
-        String patient = patientService.getPatientNombreById(id).getNameAsSingleString();
-        return ResponseEntity.ok(patient);
+        String nombre = "";
+        Patient patient = patientService.getPatientById(id);
+        nombre=patient.getNameFirstRep().getGiven().get(0).toString();
+        nombre+=" "+patient.getNameFirstRep().getFamily();
+        return ResponseEntity.ok(nombre);
     }
-
-
     @GetMapping
     public ResponseEntity<Bundle> getAllPatients() {
         Bundle patients = patientService.getAllPatients();

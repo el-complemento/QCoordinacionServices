@@ -22,13 +22,23 @@ public class PractitionerRoleService {
         MethodOutcome outcome = fhirClient.create().resource(nuevoPractitioner).execute();
         return outcome.getId().getIdPart();
     }
+    public PractitionerRole getPractitionerRole(String idPractitioner) {
+        Bundle results=fhirClient
+                .search()
+                .forResource(PractitionerRole.class)
+                .where(PractitionerRole.PRACTITIONER.hasId(idPractitioner))
+                .returnBundle(Bundle.class)
+                .execute();
+        PractitionerRole role = (PractitionerRole) results.getEntry().get(0).getResource();
+        return role;
+    }
+
     //esto se mira y no se toca
-    public Bundle getPractitionersByRole(String roleCode, String system) {
-        system = "http://terminology.hl7.org/CodeSystem/".concat(system);
+    public Bundle getPractitionersByRole(String roleCode) {
         return fhirClient
                 .search()
                 .forResource(PractitionerRole.class)
-                .where(PractitionerRole.ROLE.exactly().systemAndCode(system, roleCode))
+                .where(PractitionerRole.ROLE.exactly().code(roleCode))
                 .include(PractitionerRole.INCLUDE_PRACTITIONER)
                 .returnBundle(Bundle.class)
                 .execute();

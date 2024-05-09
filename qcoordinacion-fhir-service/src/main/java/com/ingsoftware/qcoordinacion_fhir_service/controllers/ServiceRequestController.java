@@ -36,6 +36,18 @@ public class ServiceRequestController {
         ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
         return ResponseEntity.ok(serviceRequest);
     }
+    @GetMapping("id/fecha/{id}")
+    public ResponseEntity<Date> getFechaServiceRequest(@PathVariable String id) {
+        ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
+        Date  fechaOrden = serviceRequest.getAuthoredOn();
+        return ResponseEntity.ok(fechaOrden);
+    }
+    @GetMapping("/patientId/{id}")
+    public ResponseEntity<String> getServiceRequestPatientId(@PathVariable String id) {
+        ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
+        String idPaciente = serviceRequest.getSubject().getReference();
+        return ResponseEntity.ok(idPaciente);
+    }
     @GetMapping("/status/{id}")
     public ResponseEntity<String> getServiceRequestStatus(@PathVariable String id) {
         String serviceRequest = serviceRequestService.getServiceRequestById(id).getStatus().toString();
