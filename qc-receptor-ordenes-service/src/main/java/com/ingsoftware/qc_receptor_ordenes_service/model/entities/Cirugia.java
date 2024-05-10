@@ -18,8 +18,6 @@ public class Cirugia {
     private Estado estado;
     private Date fecha;
     private Integer numeroQuirofano;
-    @OneToMany
-    private List<PersonalMedico> medicos;
     private String numeroOrdenAsociada;
 
 

@@ -1,9 +1,7 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
 
 import com.ingsoftware.qcoordinacion_fhir_service.services.PractitionerRoleService;
-import jakarta.websocket.server.PathParam;
 import org.hl7.fhir.r5.model.Bundle;
-import java.net.URLDecoder;
 import org.hl7.fhir.r5.model.Practitioner;
 import org.hl7.fhir.r5.model.PractitionerRole;
 import org.hl7.fhir.r5.model.Resource;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
