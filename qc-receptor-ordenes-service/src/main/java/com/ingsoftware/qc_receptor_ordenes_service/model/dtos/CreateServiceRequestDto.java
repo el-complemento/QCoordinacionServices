@@ -25,7 +25,7 @@ public class CreateServiceRequestDto {
     private String practitioner;
     private String practitionerRole;
 
-    private List<ServiceRequest> preOperative;
+    private List<CreateServiceRequestDto> preOperative;
 
     public ServiceRequest toEntity() {
         ServiceRequest entity = new ServiceRequest();
