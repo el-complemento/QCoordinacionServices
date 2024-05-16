@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: qcoordinacion-fhir-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
