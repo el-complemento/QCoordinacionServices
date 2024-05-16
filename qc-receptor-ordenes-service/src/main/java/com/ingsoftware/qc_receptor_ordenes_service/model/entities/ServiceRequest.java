@@ -16,8 +16,5 @@ public class ServiceRequest {
     private String code;
     private String authoredOn;
     private String performerType;
-
     private Patient patient;
-    private Practitioner practitioner;
-    private PractitionerRole practitionerRole;
 }
