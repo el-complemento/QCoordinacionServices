@@ -1,10 +1,6 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
-
-
-
 import com.ingsoftware.qcoordinacion_fhir_service.services.PatientService;
 import org.hl7.fhir.r5.model.Bundle;
-import org.hl7.fhir.r5.model.HumanName;
 import org.hl7.fhir.r5.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +15,7 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<String> createPatient(@RequestBody String patient) {
         String patientId = patientService.createPatient(patient);
         return ResponseEntity.ok(patientId);
@@ -43,6 +39,12 @@ public class PatientController {
         Bundle patients = patientService.getAllPatients();
         return ResponseEntity.ok(patients);
         }
+    @GetMapping("/cedulas")
+    public ResponseEntity<List<String>> getAllPatientsCedulas() {
+        List<String> patientsCedulas = patientService.getAllPatientsCedulas();
+        return ResponseEntity.ok(patientsCedulas);
+    }
+
 }
 
 
