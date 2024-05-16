@@ -3,10 +3,11 @@ import com.ingsoftware.qcoordinacion_fhir_service.services.ServiceRequestService
 import org.hl7.fhir.r5.model.Bundle;
 import org.hl7.fhir.r5.model.Resource;
 import org.hl7.fhir.r5.model.ServiceRequest;
+import org.hl7.fhir.utilities.json.model.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.json.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
