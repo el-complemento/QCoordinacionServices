@@ -18,11 +18,13 @@ public class QcoordinacionServicesApiGatewayApplication {
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
 		String url = "lb://qcoordinacion-fhir-service";
-		return builder.routes()
-				.route(r -> r.path("/api/v1/patients/**").uri(url))
-				.route(r -> r.path("/api/v1/practicioners/**").uri(url))
-				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(url))
-				.route(r -> r.path("/api/v1/service-requests/**").uri(url))
+		RouteLocator rutasFhirService = builder.routes()
+				.route(r -> r.path("/fhir-service/api/v1/patients/**").uri(url))
+				.route(r -> r.path("/fhir-service/api/v1/practicioners/**").uri(url))
+				.route(r -> r.path("/fhir-service/api/v1/practitioner-roles/**").uri(url))
+				.route(r -> r.path("/fhir-service/api/v1/service-requests/**").uri(url))
+				.route(r -> r.path("/fhir-service/api/v1/service-requests/**").uri(url))
 				.build();
+		return rutasFhirService;
 	}
 }
