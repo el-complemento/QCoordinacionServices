@@ -1,10 +1,8 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
 
+import ca.uhn.fhir.rest.annotation.Search;
 import com.ingsoftware.qcoordinacion_fhir_service.services.PractitionerRoleService;
-import org.hl7.fhir.r5.model.Bundle;
-import org.hl7.fhir.r5.model.Practitioner;
-import org.hl7.fhir.r5.model.PractitionerRole;
-import org.hl7.fhir.r5.model.Resource;
+import org.hl7.fhir.r5.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,33 +21,35 @@ public class PractitionerRoleController {
         String practitionerRoleId = practitionerRoleService.createPractitionerRole(practitioner);
         return ResponseEntity.ok(": " + practitionerRoleId);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/rol/{id}")
+    @Search
     public ResponseEntity<String> getPractitionerRole(@PathVariable String id) {
         PractitionerRole rolId = practitionerRoleService.getPractitionerRole(id);
         String rolEnString = rolId.getCodeFirstRep().getCoding().get(0).getCode();
         return ResponseEntity.ok(rolEnString);
     }
-    @GetMapping("{role}")
+    @GetMapping("/practitioners/{role}")
     public ResponseEntity<Bundle> getPractitionersWithRole(@PathVariable String role) {
         Bundle practitioner = practitionerRoleService.getPractitionersByRole(role);
         return ResponseEntity.ok(practitioner);
     }
-    @GetMapping("/nombresRoles/{role}")
-    public ResponseEntity<List<String>> getPractitionersNameWithRole(@PathVariable String role) {
+    @GetMapping("/disponibilidad/{id}")
+    public ResponseEntity<String> getPractitionerDisponiblidad(@PathVariable String id) {
+        String disponibilidad = practitionerRoleService.getPractitionerDisponibilidad(id);
+        return ResponseEntity.ok(disponibilidad);
+    }
+    @GetMapping("/id/{role}")
+    public ResponseEntity<List<String>> getPractitionersIDWithRole(@PathVariable String role) {
         Bundle practitioners = practitionerRoleService.getPractitionersByRole(role);
-        List<String> nombres = new ArrayList<>();
+        List<String> cedulas = new ArrayList<>();
         if (practitioners != null && practitioners.hasEntry()) {
             for (Bundle.BundleEntryComponent entry : practitioners.getEntry()) {
                 Resource resource = entry.getResource();
-                String nombre="";
-                if (resource instanceof Practitioner) {
-                    Practitioner practitioner = (Practitioner) resource;
-                    nombre=practitioner.getNameFirstRep().getGiven().get(0).toString();
-                    nombre+=" "+practitioner.getNameFirstRep().getFamily();// Obtiene el apellido
-                    nombres.add(nombre);
+                if (resource instanceof Practitioner practitioner) {
+                    cedulas.add(practitioner.getIdPart());
                 }
            }
         }
-        return ResponseEntity.ok(nombres);
+        return ResponseEntity.ok(cedulas);
     }
 }

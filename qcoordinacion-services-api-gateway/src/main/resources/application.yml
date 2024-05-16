@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Rutas para microservicio de comunicación con FHIR
+        - id: qcoordinacion-fhir-service
+        - uri: http://localhost:8082
+        -  predicates:
+            - Path=/api/v1/patients/**
+            - Path=/api/v1/practitioners/**
+            - Path=/api/v1/practitioner-roles/**
+            - Path=/api/v1/service-requests/**
+        # Rutas para el microservicio de recepcion de ordenes
+        - id: qc-receptor-ordenes-service
+        - uri: http://localhost:8083
+        -  predicates:
+          # Aquí puedes agregar los paths cuando tengas definidos los endpoints

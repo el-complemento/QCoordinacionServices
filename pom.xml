@@ -25,6 +25,7 @@
 	<modules>
 		<module>qc-receptor-ordenes-service</module>
 		<module>qcoordinacion-fhir-service</module>
+		<module>qc-algoritmo</module>
 	</modules>
 
 	<dependencies>

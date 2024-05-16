@@ -29,6 +29,7 @@ public class Cirugia {
                 ", fecha='" + fecha.toString() + '\'' +
                 '}';
     }
+
 }
 
 

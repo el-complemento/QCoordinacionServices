@@ -18,7 +18,6 @@ public class CreateServiceRequestDto {
     private String code;
     private String authoredOn;
     private String performerType;
-
     private String patient;
     private String practitioner;
     private String practitionerRole;

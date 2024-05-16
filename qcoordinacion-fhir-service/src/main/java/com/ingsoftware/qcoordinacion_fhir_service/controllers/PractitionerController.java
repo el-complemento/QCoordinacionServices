@@ -1,7 +1,6 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
 
 import com.ingsoftware.qcoordinacion_fhir_service.services.PractitionerService;
-import org.hl7.fhir.r5.model.Patient;
 import org.hl7.fhir.r5.model.Practitioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ public class PractitionerController {
     @Autowired
     private PractitionerService practitionerService;
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<String> createPracticioner(@RequestBody String practitioner) {
         String practitionerId = practitionerService.createPractitioner(practitioner);
         return ResponseEntity.ok(practitionerId);

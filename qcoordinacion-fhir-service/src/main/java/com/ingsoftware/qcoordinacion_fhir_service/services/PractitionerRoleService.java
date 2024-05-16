@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r5.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,22 @@ public class PractitionerRoleService {
         PractitionerRole role = (PractitionerRole) results.getEntry().get(0).getResource();
         return role;
     }
+    public String getPractitionerDisponibilidad(String idPractitioner) {
+        String aDevolver="";
+        IParser parser = fhirContext.newJsonParser();
+        Bundle results=fhirClient
+                .search()
+                .forResource(PractitionerRole.class)
+                .where(PractitionerRole.PRACTITIONER.hasId(idPractitioner))
+                .returnBundle(Bundle.class)
+                .execute();
+        PractitionerRole role = (PractitionerRole) results.getEntry().get(0).getResource();
+        for (Availability disponibilidad : role.getAvailability()){
+            aDevolver.concat(parser.encodeResourceToString((IBaseResource) disponibilidad));
+        }
+        return aDevolver;
+    }
 
-    //esto se mira y no se toca
     public Bundle getPractitionersByRole(String roleCode) {
         return fhirClient
                 .search()

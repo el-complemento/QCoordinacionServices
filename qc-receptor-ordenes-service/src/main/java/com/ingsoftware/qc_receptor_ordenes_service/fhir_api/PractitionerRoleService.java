@@ -10,8 +10,8 @@ public class PractitionerRoleService {
 
     @Autowired
     private RestTemplate restTemplate;
-
     private final String practitionerRoleBaseUrl = "http://localhost:8181/api/v1/practitioner-roles";
+
 
     public ResponseEntity<String> createPractitionerRole(String practitionerRole) {
         String url = practitionerRoleBaseUrl;

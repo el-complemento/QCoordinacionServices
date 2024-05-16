@@ -1,12 +1,6 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
-
-
-
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import com.ingsoftware.qcoordinacion_fhir_service.services.ServiceRequestService;
 import org.hl7.fhir.r5.model.Bundle;
-import org.hl7.fhir.r5.model.Practitioner;
 import org.hl7.fhir.r5.model.Resource;
 import org.hl7.fhir.r5.model.ServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
