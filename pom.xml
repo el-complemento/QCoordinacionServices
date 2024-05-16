@@ -27,6 +27,7 @@
 		<module>qc-receptor-ordenes-service</module>
 		<module>qcoordinacion-fhir-service</module>
 		<module>qcoordinacion-services-api-gateway</module>
+		<module>qc-service-registry</module>
 	</modules>
 
 	<dependencies>
