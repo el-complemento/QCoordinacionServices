@@ -54,8 +54,16 @@
                 String prioridad = String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay());
                 List<String> doctores = obtenerDoctores(encounter);
                 String paciente = obtenerPaciente(encounter);
-                String json = String.format("{title: '%s', start: %s, end: %s, color: '%s', doctores: %s, paciente: '%s', idOrden: '%s'}",
-                        title, startDate, endDate, prioridad, doctores, paciente, idOrden);
+                String quirofano = encounter.getLocation().get(0).getLocation().getDisplay().split(" ")[1];
+                String json = String.format("{title: '%s', start: '%s', end: '%s', color: '%s', doctores: %s, paciente: '%s', idOrden: '%s', quirofano: '%s'}",
+                        title,
+                        startDate,
+                        endDate,
+                        prioridad,
+                        doctores,
+                        paciente,
+                        idOrden,
+                        quirofano); // Se añade el campo quirofano aquí
                 cirugiasJson.add(json);
             }
             return cirugiasJson;

@@ -59,8 +59,8 @@ public class ServiceRequestLogic {
 
         ServiceRequest serviceRequestEntity = serviceRequest.toEntity();
         serviceRequestEntity.setPatient(patient);
-        serviceRequestEntity.setPractitioner(practitioner);
-        serviceRequestEntity.setPractitionerRole(practitionerRole);
+        //serviceRequestEntity.setPractitioner(practitioner);
+        //serviceRequestEntity.setPractitionerRole(practitionerRole);
 
         serviceRequest.toEntity();
     }
