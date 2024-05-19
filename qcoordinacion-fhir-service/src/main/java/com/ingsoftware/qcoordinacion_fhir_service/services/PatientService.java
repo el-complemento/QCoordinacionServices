@@ -19,11 +19,11 @@ public class PatientService {
     public String createPatient(String patient) {
         IParser parser =  fhirContext.newJsonParser();
         Patient nuevoPaciente = parser.parseResource(Patient.class, patient);
-        MethodOutcome outcome = fhirClient.create().resource(nuevoPaciente).execute();
+        MethodOutcome outcome = fhirClient.update().resource(nuevoPaciente).execute();
         return outcome.getId().getIdPart();
     }
 
-    public HumanName getPatientNombreById(String id) {
+    public  HumanName getPatientNombreById(String id) {
         Patient paciente = fhirClient.read().resource(Patient.class).withId(id).execute();
         List<HumanName> names = paciente.getName();
         return paciente.getNameFirstRep();
@@ -33,6 +33,14 @@ public class PatientService {
     }
     public Bundle getAllPatients() {
         return fhirClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
+    }
+    public List<String> getAllPatientsCedulas(){
+        List<String> cedulas = new ArrayList<>();
+        Bundle pacientes = fhirClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
+        for (Bundle.BundleEntryComponent entry : pacientes.getEntry()) {
+            cedulas.add(entry.getResource().getIdPart());
+        }
+        return cedulas;
     }
 }
 

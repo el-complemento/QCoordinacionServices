@@ -12,14 +12,23 @@ public class PractitionerController {
     @Autowired
     private PractitionerService practitionerService;
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<String> createPracticioner(@RequestBody String practitioner) {
         String practitionerId = practitionerService.createPractitioner(practitioner);
-        return ResponseEntity.ok("Patient created with ID: " + practitionerId);
+        return ResponseEntity.ok(practitionerId);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Practitioner> getPractitioner(@RequestBody String id){
+    public ResponseEntity<Practitioner> getPractitioner(@PathVariable String id){
         Practitioner practitioner = practitionerService.getPractitioner(id);
         return ResponseEntity.ok(practitioner);
     }
+    @GetMapping("/nombre/{id}")
+    public ResponseEntity<String> getPractitionerName(@PathVariable String id){
+        String nombre = "";
+        Practitioner practitioner = practitionerService.getPractitioner(id);
+        nombre=practitioner.getNameFirstRep().getGiven().get(0).toString();
+        nombre+=" "+practitioner.getNameFirstRep().getFamily();
+        return ResponseEntity.ok(nombre);
+    }
+
 }
