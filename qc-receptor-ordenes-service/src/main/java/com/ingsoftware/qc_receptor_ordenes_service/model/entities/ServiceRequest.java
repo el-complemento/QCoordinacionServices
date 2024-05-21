@@ -2,11 +2,14 @@ package com.ingsoftware.qc_receptor_ordenes_service.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ingsoftware.qc_receptor_ordenes_service.model.entities.util.*;
 import com.ingsoftware.qc_receptor_ordenes_service.model.enums.StatusEnum;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,61 +36,39 @@ public class ServiceRequest {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Patient patient;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class Subject {
-        private String reference;
+    public void setCoding(String system, String code, String text) {
+        Code newCode = new Code();
+        Concept concept = new Concept();
+        Coding coding = new Coding();
+
+        coding.setSystem(system);
+        coding.setCode(code);
+
+        List<Coding> codingList = new ArrayList<>();
+        codingList.add(coding);
+
+        concept.setCoding(codingList);
+        concept.setText(text);
+
+        newCode.setConcept(concept);
+
+        this.setCode(newCode);
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class Code {
-        private Concept concept;
+    public void setPerformerType(String system, String code, String display) {
+        PerformerType performerType = new PerformerType();
+        PerformerTypeCoding performerCoding = new PerformerTypeCoding();
 
-        @Getter
-        @Setter
-        @NoArgsConstructor
-        public static class Concept {
-            private List<Coding> coding;
-            private String text;
+        performerCoding.setSystem(system);
+        performerCoding.setCode(code);
+        performerCoding.setDisplay(display);
 
-            @Getter
-            @Setter
-            @NoArgsConstructor
-            public static class Coding {
-                private String system;
-                private String code;
-            }
-        }
-    }
+        List<PerformerTypeCoding> performerCodingList = new ArrayList<>();
+        performerCodingList.add(performerCoding);
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class BasedOn {
-        private String display;
+        performerType.setCoding(performerCodingList);
 
-        public void setReference(String display) {
-            this.display = display;
-        }
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class PerformerType {
-        private List<Coding> coding;
-
-        @Getter
-        @Setter
-        @NoArgsConstructor
-        public static class Coding {
-            private String system;
-            private String code;
-            private String display;
-        }
+        this.setPerformerType(performerType);
     }
 
     public void setBasedOnReference(String reference) {
@@ -95,27 +76,5 @@ public class ServiceRequest {
             this.basedOn = new BasedOn();
         }
         this.basedOn.setReference(reference);
-    }
-    public void setCoding(String system, String code, String text) {
-        Code.Concept.Coding coding = new Code.Concept.Coding();
-        coding.setSystem(system);
-        coding.setCode(code);
-
-        Code.Concept concept = new Code.Concept();
-        concept.setCoding(List.of(coding));
-        concept.setText(text);
-
-        this.code = new Code();
-        this.code.setConcept(concept);
-    }
-
-    public void setPerformerType(String system, String code, String display) {
-        PerformerType.Coding coding = new PerformerType.Coding();
-        coding.setSystem(system);
-        coding.setCode(code);
-        coding.setDisplay(display);
-
-        this.performerType = new PerformerType();
-        this.performerType.setCoding(List.of(coding));
     }
 }

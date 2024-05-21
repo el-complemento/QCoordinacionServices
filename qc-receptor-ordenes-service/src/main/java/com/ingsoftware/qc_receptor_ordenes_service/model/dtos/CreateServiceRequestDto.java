@@ -24,7 +24,7 @@ public class CreateServiceRequestDto {
 
     public ServiceRequest toEntity() {
         ServiceRequest entity = new ServiceRequest();
-        entity.setBasedOnReference(this.basedOn);
+        entity.setBasedOnReference(basedOn);
         entity.setPriority(this.priority);
         entity.setAuthoredOn(this.authoredOn);
         return entity;

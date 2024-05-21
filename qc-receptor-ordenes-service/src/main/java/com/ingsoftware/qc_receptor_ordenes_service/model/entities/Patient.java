@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ingsoftware.qc_receptor_ordenes_service.model.entities.util.Name;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,15 +33,5 @@ public class Patient {
             this.nameFamily = name.getFamily();
             this.nameGiven = name.getGiven();
         }
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Name {
-        private String use;
-        private String family;
-        private List<String> given;
     }
 }

@@ -16,7 +16,7 @@ public class ServiceRequestService {
 
     private RestTemplate restTemplate;
 
-    private final String url = "http://localhost:8082/api/v1/service-requests";
+    static final String URL = "lb://qcoordinacion-fhir-service/api/v1/service-requests";
 
     @Autowired
     public ServiceRequestService(RestTemplate restTemplate) {
@@ -32,7 +32,7 @@ public class ServiceRequestService {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, requestEntity, String.class);
 
         HttpStatusCode statusCode = responseEntity.getStatusCode();
         if (!statusCode.is2xxSuccessful()) {

@@ -3,9 +3,11 @@ package com.ingsoftware.qc_receptor_ordenes_service.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ingsoftware.qc_receptor_ordenes_service.fhir_api.PatientService;
 import com.ingsoftware.qc_receptor_ordenes_service.fhir_api.ServiceRequestService;
+import com.ingsoftware.qc_receptor_ordenes_service.model.entities.util.Subject;
 import com.ingsoftware.qc_receptor_ordenes_service.model.enums.PriorityEnum;
 import com.ingsoftware.qc_receptor_ordenes_service.model.entities.Patient;
 import com.ingsoftware.qc_receptor_ordenes_service.model.entities.ServiceRequest;
+
 import com.ingsoftware.qc_receptor_ordenes_service.model.dtos.CreateServiceRequestDto;
 import com.ingsoftware.qc_receptor_ordenes_service.model.enums.StatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,9 @@ public class ServiceRequestLogic {
 
     private final PatientService patientService;
     private final ServiceRequestService serviceRequestService;
-    private final String CODING_SYSTEM = ""; // Modify the string to the Coding system used by the hospital.
-    private final String RESOURCE_TYPE = "ServiceRequest";
-    private final String TEXTUAL_DESCRIPTION_SERVICE_REQUEST = "";
+    static final String CODING_SYSTEM = "SNOMED";
+    static final String RESOURCE_TYPE = "ServiceRequest";
+    static final String TEXTUAL_DESCRIPTION_SERVICE_REQUEST = "";
 
 
     @Autowired
@@ -68,7 +70,7 @@ public class ServiceRequestLogic {
     private ServiceRequest createServiceRequestEntity(CreateServiceRequestDto serviceRequestDto, Patient patient) {
        try{
         ServiceRequest serviceRequestEntity = serviceRequestDto.toEntity();
-        ServiceRequest.Subject subject = new ServiceRequest.Subject();
+        Subject subject = new Subject();
         subject.setReference("Patient/" + serviceRequestDto.getPatientId());
         serviceRequestEntity.setSubject(subject);
         serviceRequestEntity.setResourceType(RESOURCE_TYPE);

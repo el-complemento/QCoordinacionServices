@@ -15,7 +15,7 @@ public class PatientService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String patientBaseUrl = "http://localhost:8080/fhir/Patient/";
+    private final String patientBaseUrl = System.getProperty("FHIR_SERVICE_URL");;
 
     public Patient getPatient(String id) throws IOException {
         String url = patientBaseUrl + "/" + id + "/_history";
