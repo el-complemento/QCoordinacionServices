@@ -23,7 +23,7 @@ public class QcoordinacionServicesApiGatewayApplication {
 				.route(r -> r.path("/api/v1/practicioners/**").uri(url))
 				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(url))
 				.route(r -> r.path("/api/v1/service-requests/**").uri(url))
-				.route(r -> r.path("/api/v1/service-requests/**").uri(url))
+				.route(r -> r.path("/api/v1/encounters/**").uri(url))
 				.build();
 		return rutasFhirService;
 	}

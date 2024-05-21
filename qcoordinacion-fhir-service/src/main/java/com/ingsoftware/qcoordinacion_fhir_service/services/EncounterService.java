@@ -43,7 +43,9 @@
 
         public List<String> devolverDataLinda() {
             List<String> cirugiasJson = new ArrayList<>();
-            Bundle cirugias = fhirClient.search().forResource(Encounter.class).returnBundle(Bundle.class).execute();
+            Bundle cirugias = fhirClient.search().forResource(Encounter.class)
+                    .where(Encounter.STATUS.exactly().code("planned"))
+                    .returnBundle(Bundle.class).execute();
             for (Bundle.BundleEntryComponent entry : cirugias.getEntry()) {
                 Encounter encounter = (Encounter) entry.getResource();
                 String idOrden = encounter.getBasedOn().get(0).getReference().split("/")[1];
@@ -54,7 +56,7 @@
                 String prioridad = String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay());
                 List<String> doctores = obtenerDoctores(encounter);
                 String paciente = obtenerPaciente(encounter);
-                String quirofano = encounter.getLocation().get(0).getLocation().getDisplay().split(" ")[1];
+                String quirofano = encounter.getLocation().get(0).getLocation().getReference().split("/")[1];
                 String json = String.format("{title: '%s', start: '%s', end: '%s', color: '%s', doctores: %s, paciente: '%s', idOrden: '%s', quirofano: '%s'}",
                         title,
                         startDate,

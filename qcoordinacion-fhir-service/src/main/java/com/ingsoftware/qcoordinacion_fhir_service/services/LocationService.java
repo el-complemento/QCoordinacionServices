@@ -26,4 +26,12 @@ public class LocationService {
         Availability disponibilidadQuirofano = quirofano.getHoursOfOperation().get(0);
         return parser.encodeToString(disponibilidadQuirofano);
     }
+    public Integer getCantidadQuirofanos(){
+        Bundle results = fhirClient
+                .search()
+                .forResource("Location")
+                .returnBundle(Bundle.class)
+                .execute();
+        return results.getTotal();
+    }
 }

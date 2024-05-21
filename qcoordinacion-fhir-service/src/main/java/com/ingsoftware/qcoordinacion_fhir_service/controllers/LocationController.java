@@ -21,5 +21,9 @@ public class LocationController {
         String disponibilidadQuirofano = locationService.getDisponibilidadQuirofano(idQuirofano);
         return ResponseEntity.ok(disponibilidadQuirofano);
     }
+    @GetMapping("/cantidad")
+    public ResponseEntity<Integer> getCantidadQuirofanos() {
+        return ResponseEntity.ok(locationService.getCantidadQuirofanos());
+    }
 
 }
