@@ -1,6 +1,8 @@
 package com.ingsoftware.qcoordinacion_fhir_service.controllers;
 import com.ingsoftware.qcoordinacion_fhir_service.services.EncounterService;
 import org.hl7.fhir.r5.model.Encounter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/encounters")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}) // Configura los orígenes permitidos
 public class EncounterController {
     @Autowired
     private EncounterService encounterService;
@@ -28,10 +31,9 @@ public class EncounterController {
         return ResponseEntity.ok(cirugia);
     }
 
-
     @GetMapping
-    public ResponseEntity<List<String >> getAllEncountersDataLinda(){
-        return ResponseEntity.ok(encounterService.devolverDataLinda());
+    public ResponseEntity<String> getAllEncountersDataLinda(){
+        return ResponseEntity.ok(encounterService.toJson().toString());
     }
 
     @DeleteMapping("/{id}")

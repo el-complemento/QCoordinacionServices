@@ -5,6 +5,8 @@
     import ca.uhn.fhir.rest.client.api.IGenericClient;
     import org.hl7.fhir.r5.model.*;
     import ca.uhn.fhir.rest.api.MethodOutcome;
+    import org.json.JSONArray;
+    import org.json.JSONObject;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Service;
     import java.util.ArrayList;
@@ -41,34 +43,31 @@
         }
 
 
-        public List<String> devolverDataLinda() {
-            List<String> cirugiasJson = new ArrayList<>();
+        public JSONArray toJson() {
+            List<JSONObject> cirugiasJson = new ArrayList<>();
+
             Bundle cirugias = fhirClient.search().forResource(Encounter.class)
                     .where(Encounter.STATUS.exactly().code("planned"))
                     .returnBundle(Bundle.class).execute();
+
             for (Bundle.BundleEntryComponent entry : cirugias.getEntry()) {
+                JSONObject objeto = new JSONObject();
                 Encounter encounter = (Encounter) entry.getResource();
                 String idOrden = encounter.getBasedOn().get(0).getReference().split("/")[1];
                 ServiceRequest ordenAsociada = obtenerOrden(idOrden);
-                String title = ordenAsociada.getCode().getConcept().getText();
-                Date startDate = encounter.getPlannedStartDate();
-                Date endDate = encounter.getPlannedEndDate();
-                String prioridad = String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay());
-                List<String> doctores = obtenerDoctores(encounter);
-                String paciente = obtenerPaciente(encounter);
-                String quirofano = encounter.getLocation().get(0).getLocation().getReference().split("/")[1];
-                String json = String.format("{title: '%s', start: '%s', end: '%s', color: '%s', doctores: %s, paciente: '%s', idOrden: '%s', quirofano: '%s'}",
-                        title,
-                        startDate,
-                        endDate,
-                        prioridad,
-                        doctores,
-                        paciente,
-                        idOrden,
-                        quirofano); // Se añade el campo quirofano aquí
-                cirugiasJson.add(json);
+                objeto.accumulate("title", ordenAsociada.getCode().getConcept().getText());
+                objeto.accumulate("startDate", encounter.getPlannedStartDate());
+                objeto.accumulate("endDate", encounter.getPlannedEndDate());
+                objeto.accumulate("prioridad", String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay()));
+                objeto.accumulate("doctores", obtenerDoctores(encounter));
+                objeto.accumulate("paciente", obtenerPaciente(encounter));
+                objeto.accumulate("idOrden", idOrden);
+                objeto.accumulate("quirofano",  encounter.getLocation().get(0).getLocation().getReference().split("/")[1]);
+
+                cirugiasJson.add(objeto);
             }
-            return cirugiasJson;
+
+            return new JSONArray(cirugiasJson);
         }
 
         private ServiceRequest obtenerOrden(String idOrden) {
