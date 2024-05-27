@@ -3,55 +3,42 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.ingsoftware</groupId>
+		<artifactId>qcoordinacion-services</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.ingsoftware</groupId>
-	<artifactId>qcoordinacion-services</artifactId>
+
+
+	<artifactId>qc-service-disovery</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>qcoordinacion-services</name>
+	<name>qc-service-registry</name>
 	<description>Demo project for Spring Boot</description>
 
-	<packaging>pom</packaging>
-
 	<properties>
+		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<modules>
-		<module>qc-receptor-ordenes-service</module>
-		<module>qc-fhir-service</module>
-		<module>qc-algoritmo</module>
-		<module>qc-api-gateway-service</module>
-		<module>qc-service-disovery</module>
-	</modules>
-
 	<dependencies>
-
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>6.1.5</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
-
-
-
 		<dependency>
-			<groupId>io.github.cdimascio</groupId>
-			<artifactId>dotenv-java</artifactId>
-			<version>3.0.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
 			<artifactId>httpclient5</artifactId>
-			<scope>test</scope>
+			<version>5.3.1</version>
 		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -67,7 +54,10 @@
 
 	<build>
 		<plugins>
-
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 
