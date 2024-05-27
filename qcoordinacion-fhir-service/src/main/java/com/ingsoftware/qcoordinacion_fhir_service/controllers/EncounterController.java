@@ -32,8 +32,8 @@ public class EncounterController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getAllEncountersDataLinda(){
-        return ResponseEntity.ok(encounterService.toJson().toString());
+    public ResponseEntity<String> getAllEncounters(){
+        return ResponseEntity.ok(encounterService.getAllEncounters().toString());
     }
 
     @DeleteMapping("/{id}")
