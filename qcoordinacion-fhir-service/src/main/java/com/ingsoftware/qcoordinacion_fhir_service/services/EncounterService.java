@@ -42,8 +42,7 @@
             }
         }
 
-
-        public JSONArray toJson() {
+        public JSONArray getAllEncounters() {
             List<JSONObject> cirugiasJson = new ArrayList<>();
 
             Bundle cirugias = fhirClient.search().forResource(Encounter.class)
@@ -55,10 +54,13 @@
                 Encounter encounter = (Encounter) entry.getResource();
                 String idOrden = encounter.getBasedOn().get(0).getReference().split("/")[1];
                 ServiceRequest ordenAsociada = obtenerOrden(idOrden);
+                String prioridad = String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay());
+
                 objeto.accumulate("title", ordenAsociada.getCode().getConcept().getText());
-                objeto.accumulate("startDate", encounter.getPlannedStartDate());
-                objeto.accumulate("endDate", encounter.getPlannedEndDate());
-                objeto.accumulate("prioridad", String.valueOf(encounter.getPriority().getCoding().get(0).getDisplay()));
+                objeto.accumulate("start", encounter.getPlannedStartDate());
+                objeto.accumulate("end", encounter.getPlannedEndDate());
+                objeto.accumulate("prioridad", prioridad);
+                objeto.accumulate("color", obtenerColorPorPrioridad(prioridad));
                 objeto.accumulate("doctores", obtenerDoctores(encounter));
                 objeto.accumulate("paciente", obtenerPaciente(encounter));
                 objeto.accumulate("idOrden", idOrden);
@@ -73,7 +75,6 @@
         private ServiceRequest obtenerOrden(String idOrden) {
             return fhirClient.read().resource(ServiceRequest.class).withId(idOrden).execute();
         }
-
 
         private List<String> obtenerDoctores(Encounter encounter) {
             List<String> nombres = new ArrayList<>();
@@ -91,6 +92,7 @@
             }
             return nombres;
         }
+
         private String obtenerPaciente(Encounter encounter) {
             String nombreCompleto = "";
             Reference paciente = encounter.getSubject();
@@ -102,4 +104,21 @@
             return nombreCompleto;
         }
 
+        private String obtenerColorPorPrioridad(String prioridad) {
+            String color = prioridad;
+
+            if(prioridad.equals("ASAP") || prioridad.equals("emergency")){
+                color = "high";
+            }
+
+            if( prioridad.equals("urgent") || prioridad.equals("elective")){
+                color = "normal";
+            }
+
+            if(prioridad.equals("routine")){
+                color = "low";
+            }
+
+            return color;
+        }
     }
