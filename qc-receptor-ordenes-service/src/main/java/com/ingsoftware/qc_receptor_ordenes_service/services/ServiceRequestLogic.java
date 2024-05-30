@@ -75,7 +75,7 @@ public class ServiceRequestLogic {
         serviceRequestEntity.setCoding(CODING_SYSTEM, serviceRequestDto.getCode(), TEXTUAL_DESCRIPTION_SERVICE_REQUEST);
         serviceRequestEntity.setPatient(patient);
         serviceRequestEntity.setStatus(StatusEnum.ACTIVE);
-        serviceRequestEntity.setPerformerType(CODING_SYSTEM,serviceRequestDto.getPerformerTypeCode(),serviceRequestDto.getPerformerTypeCode().toUpperCase());
+        serviceRequestEntity.setPerformerType(CODING_SYSTEM,serviceRequestDto.getPerformerTypeCode(),serviceRequestDto.getPerformerTypeCode());
         serviceRequestEntity.setOcurrenceTiming(serviceRequestDto.getOcurrenceTiming(),"");
         serviceRequestEntity.setRequester(serviceRequestDto.getRequester());
 

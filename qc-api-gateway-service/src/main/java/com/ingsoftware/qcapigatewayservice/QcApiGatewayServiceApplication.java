@@ -27,6 +27,7 @@ public class QcApiGatewayServiceApplication {
 				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(url))
 				.route(r -> r.path("/api/v1/service-requests/**").uri(url))
 				.route(r -> r.path("/api/v1/encounters/**").uri(url))
+				.route(r -> r.path("/api/v1/locations/**").uri(url))
 				.build();
 		return rutasFhirService;
 	}
