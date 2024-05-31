@@ -24,6 +24,8 @@ public class ServiceRequest {
     private StatusEnum status;
     private String priority;
     private Code code;
+    private OcurrenceTiming ocurrenceTiming;
+    private Requester requester;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String identifier;
@@ -76,5 +78,22 @@ public class ServiceRequest {
             this.basedOn = new BasedOn();
         }
         this.basedOn.setReference(reference);
+    }
+
+    public void setRequester(String reference) {
+        if (this.requester == null) {
+            this.requester = new Requester();
+        }
+        this.requester.setReference(reference);
+    }
+
+    public void setOcurrenceTiming(String duration, String durationUnit) {
+        // pusimos durationUnit xq sino dsp cuando se llama abajo te hace problemas
+        OcurrenceTiming ocurrenceTiming = new OcurrenceTiming();
+        Repeat repeat = new Repeat();
+        repeat.setDuration(duration);
+        ocurrenceTiming.setRepeat(repeat);
+
+        this.setOcurrenceTiming(ocurrenceTiming);
     }
 }

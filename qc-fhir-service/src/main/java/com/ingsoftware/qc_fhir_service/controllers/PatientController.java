@@ -2,6 +2,7 @@ package com.ingsoftware.qc_fhir_service.controllers;
 import com.ingsoftware.qc_fhir_service.services.PatientService;
 import org.hl7.fhir.r5.model.Bundle;
 import org.hl7.fhir.r5.model.Patient;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/patients")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}) // Configura los orígenes permitidos
 public class PatientController {
 
     @Autowired
@@ -38,13 +40,12 @@ public class PatientController {
     public ResponseEntity<Bundle> getAllPatients() {
         Bundle patients = patientService.getAllPatients();
         return ResponseEntity.ok(patients);
-        }
+
+    }
     @GetMapping("/cedulas")
-    public ResponseEntity<List<String>> getAllPatientsCedulas() {
-        List<String> patientsCedulas = patientService.getAllPatientsCedulas();
-        return ResponseEntity.ok(patientsCedulas);
+    public ResponseEntity<String> getAllPatientsCedulas() {
+        JSONArray patientsCedulas = patientService.getAllPatientsCedulas();
+        return ResponseEntity.ok(patientsCedulas.toString());
     }
 
 }
-
-

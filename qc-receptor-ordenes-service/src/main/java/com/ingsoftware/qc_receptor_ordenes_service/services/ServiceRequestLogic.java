@@ -36,13 +36,11 @@ public class ServiceRequestLogic {
         try {
             Patient patient = this.patientService.getPatient(serviceRequestDto.getPatientId());
 
-            if (patient == null) {
-                throw new ValidationException("Patient not found.");
-            }
+            if (patient == null)  throw new ValidationException("Patient not found.");
 
-            if (!isValidPriority(serviceRequestDto.getPriority())) {
-                throw new ValidationException("Invalid priority.");
-            }
+
+            if (!isValidPriority(serviceRequestDto.getPriority())) throw new ValidationException("Invalid priority.");
+
 
             if (serviceRequestDto.getPreOperative() != null) {
                 for (CreateServiceRequestDto preoperativeDto : serviceRequestDto.getPreOperative()) {
@@ -77,7 +75,9 @@ public class ServiceRequestLogic {
         serviceRequestEntity.setCoding(CODING_SYSTEM, serviceRequestDto.getCode(), TEXTUAL_DESCRIPTION_SERVICE_REQUEST);
         serviceRequestEntity.setPatient(patient);
         serviceRequestEntity.setStatus(StatusEnum.ACTIVE);
-        serviceRequestEntity.setPerformerType(CODING_SYSTEM,serviceRequestDto.getPerformerTypeCode(),serviceRequestDto.getPerformerTypeCode().toUpperCase());
+        serviceRequestEntity.setPerformerType(CODING_SYSTEM,serviceRequestDto.getPerformerTypeCode(),serviceRequestDto.getPerformerTypeCode());
+        serviceRequestEntity.setOcurrenceTiming(serviceRequestDto.getOcurrenceTiming(),"");
+        serviceRequestEntity.setRequester(serviceRequestDto.getRequester());
 
         final String serviceRequestID = this.serviceRequestService.createServiceRequest(serviceRequestEntity);
         if (serviceRequestID == null) {
