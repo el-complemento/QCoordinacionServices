@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,11 @@ public class ServiceRequestController {
     @Autowired
     private ServiceRequestService serviceRequestService;
 
+    @GetMapping
+    public ResponseEntity<String> getOnHoldServiceRequestsWithoutBasedOn() {
+        JSONArray ids = serviceRequestService.fetchOnHoldServiceRequestsWithBasedOnNull();
+        return ResponseEntity.ok(ids.toString());
+    }
 
     @PostMapping
     public ResponseEntity<String> createServiceRequest(@RequestBody String serviceRequestJson) {
