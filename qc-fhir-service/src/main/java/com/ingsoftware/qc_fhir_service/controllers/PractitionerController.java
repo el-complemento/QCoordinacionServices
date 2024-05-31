@@ -19,16 +19,19 @@ public class PractitionerController {
         String practitionerId = practitionerService.createPractitioner(practitioner);
         return ResponseEntity.ok(practitionerId);
     }
+  
     @GetMapping
     public ResponseEntity<String> getPractitionersConCedula() {
         JSONArray practitioners = practitionerService.getAllPractitionersCedulas();
         return ResponseEntity.ok(practitioners.toString());
     }
+  
     @GetMapping("/{id}")
     public ResponseEntity<Practitioner> getPractitioner(@PathVariable String id){
         Practitioner practitioner = practitionerService.getPractitioner(id);
         return ResponseEntity.ok(practitioner);
     }
+  
     @GetMapping("/nombre/{id}")
     public ResponseEntity<String> getPractitionerName(@PathVariable String id){
         String nombre = "";

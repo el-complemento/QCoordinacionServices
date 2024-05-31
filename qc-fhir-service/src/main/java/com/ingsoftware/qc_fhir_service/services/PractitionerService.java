@@ -9,6 +9,7 @@ import org.hl7.fhir.r5.model.HumanName;
 import org.hl7.fhir.r5.model.Patient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.hl7.fhir.r5.model.Practitioner;
@@ -18,24 +19,29 @@ import java.util.List;
 
 @Service
 public class PractitionerService {
+  
     @Autowired
     private IGenericClient fhirClient;
+  
     private final FhirContext fhirContext = FhirContext.forR5();
+  
     public String createPractitioner(String practitioner) {
         IParser parser =  fhirContext.newJsonParser();
         Practitioner nuevoPractitioner = parser.parseResource(Practitioner.class, practitioner);
         MethodOutcome outcome = fhirClient.update().resource(nuevoPractitioner).execute();
         return outcome.getId().getIdPart();
     }
+  
     public Practitioner getPractitioner(String idPractitioner) {
         return fhirClient.read().resource(Practitioner.class).withId(idPractitioner).execute();
-
     }
+  
     public  HumanName getPractitionerNombreById(String id) {
         Practitioner practitioner = fhirClient.read().resource(Practitioner.class).withId(id).execute();
         List<HumanName> names = practitioner.getName();
         return practitioner.getNameFirstRep();
     }
+
     public JSONArray getAllPractitionersCedulas(){
         List<JSONObject> practitionerJson= new ArrayList<>();
         Bundle practitioners = fhirClient.search().forResource(Practitioner.class).returnBundle(Bundle.class).execute();
@@ -50,6 +56,7 @@ public class PractitionerService {
             objeto.accumulate("nombre",nombreCompleto);
             practitionerJson.add(objeto);
         }
+      
         return new JSONArray(practitionerJson);
     }
 }

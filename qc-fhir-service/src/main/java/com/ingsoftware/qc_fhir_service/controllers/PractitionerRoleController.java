@@ -22,6 +22,7 @@ public class PractitionerRoleController {
         String practitionerRoleId = practitionerRoleService.createPractitionerRole(practitioner);
         return ResponseEntity.ok(": " + practitionerRoleId);
     }
+  
     @GetMapping("/rol/{id}")
     @Search
     public ResponseEntity<String> getPractitionerRole(@PathVariable String id) {
@@ -29,6 +30,7 @@ public class PractitionerRoleController {
         String rolEnString = rolId.getCodeFirstRep().getCoding().get(0).getCode();
         return ResponseEntity.ok(rolEnString);
     }
+  
     @GetMapping("/practitioners/{role}")
     public ResponseEntity<Bundle> getPractitionersWithRole(@PathVariable String role) {
         Bundle practitioner = practitionerRoleService.getPractitionersByRole(role);
@@ -40,6 +42,7 @@ public class PractitionerRoleController {
         String disponibilidad = practitionerRoleService.getPractitionerDisponibilidad(id);
         return ResponseEntity.ok(disponibilidad);
     }
+  
     @GetMapping("/id/{role}")
     public ResponseEntity<List<String>> getPractitionersIDWithRole(@PathVariable String role) {
         Bundle practitioners = practitionerRoleService.getPractitionersByRole(role);

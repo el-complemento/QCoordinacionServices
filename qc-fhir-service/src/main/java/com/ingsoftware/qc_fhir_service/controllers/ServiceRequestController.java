@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,28 +37,33 @@ public class ServiceRequestController {
         ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
         return ResponseEntity.ok(serviceRequest);
     }
+  
     @GetMapping("id/fecha/{id}")
     public ResponseEntity<Date> getFechaServiceRequest(@PathVariable String id) {
         ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
         Date  fechaOrden = serviceRequest.getAuthoredOn();
         return ResponseEntity.ok(fechaOrden);
     }
+  
     @GetMapping("/patientId/{id}")
     public ResponseEntity<String> getServiceRequestPatientId(@PathVariable String id) {
         ServiceRequest serviceRequest = serviceRequestService.getServiceRequestById(id);
         String idPaciente = serviceRequest.getSubject().getReference();
         return ResponseEntity.ok(idPaciente);
     }
+  
     @GetMapping("/status/{id}")
     public ResponseEntity<String> getServiceRequestStatus(@PathVariable String id) {
         String serviceRequest = serviceRequestService.getServiceRequestById(id).getStatus().toString();
         return ResponseEntity.ok(serviceRequest);
     }
+  
     @GetMapping("/fecha/{fecha}")
     public ResponseEntity<Bundle> getServiceRequestByDate(@PathVariable String fecha) {
         Bundle serviceRequestsDeFechaHaciaAdelante = serviceRequestService.getServiceRequestsFromDate(fecha);
         return ResponseEntity.ok(serviceRequestsDeFechaHaciaAdelante);
     }
+  
     @GetMapping("/fecha/id/{fecha}")
     public ResponseEntity<List<String>> getServiceRequestIdByDate(@PathVariable String fecha) {
         Bundle serviceRequestsDeFechaHaciaAdelante = serviceRequestService.getServiceRequestsFromDate(fecha);

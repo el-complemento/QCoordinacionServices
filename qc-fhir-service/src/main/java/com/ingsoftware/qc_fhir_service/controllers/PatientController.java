@@ -40,6 +40,7 @@ public class PatientController {
     public ResponseEntity<Bundle> getAllPatients() {
         Bundle patients = patientService.getAllPatients();
         return ResponseEntity.ok(patients);
+
     }
     @GetMapping("/cedulas")
     public ResponseEntity<String> getAllPatientsCedulas() {

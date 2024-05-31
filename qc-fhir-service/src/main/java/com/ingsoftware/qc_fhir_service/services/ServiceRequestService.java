@@ -8,17 +8,17 @@ import org.hl7.fhir.r5.model.*;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ServiceRequestService {
+  
     @Autowired
     private IGenericClient fhirClient;
+  
     private final FhirContext fhirContext = FhirContext.forR5();
 
     public String createServiceRequest(String serviceRequest) {
@@ -27,22 +27,25 @@ public class ServiceRequestService {
         MethodOutcome outcome = fhirClient.create().resource(nuevaServiceRequest).execute();
         return outcome.getId().getIdPart();
     }
+  
     public ServiceRequest getServiceRequestById(String id) {
         // Obtiene el paciente por su ID desde el servidor FHIR
         return fhirClient.read().resource(ServiceRequest.class).withId(id).execute();
     }
+  
     public Bundle getServiceRequestsFromDate(String date) {
         return fhirClient.search().forResource(ServiceRequest.class)
                 .where(new DateClientParam("authored").afterOrEquals().day(date))
                 .returnBundle(Bundle.class)
                 .execute();
     }
+  
     public ServiceRequest markServiceRequestAsCompleted(String id) {
         ServiceRequest serviceRequest = getServiceRequestById(id);
         if(!serviceRequest.hasBasedOn()){
-        serviceRequest.setStatus(Enumerations.RequestStatus.COMPLETED);
-        MethodOutcome outcome = fhirClient.update().resource(serviceRequest).execute();
-        return (ServiceRequest) outcome.getResource();
+          serviceRequest.setStatus(Enumerations.RequestStatus.COMPLETED);
+          MethodOutcome outcome = fhirClient.update().resource(serviceRequest).execute();
+          return (ServiceRequest) outcome.getResource();
         }
         else{
             Boolean todasSubOrdenesCompletadas= true;
@@ -69,6 +72,7 @@ public class ServiceRequestService {
         }
 
     }
+
     public JSONArray fetchOnHoldServiceRequestsWithBasedOnNull() {
         List<JSONObject> ordenesJson = new ArrayList<>();
         // Recupera todos los ServiceRequest

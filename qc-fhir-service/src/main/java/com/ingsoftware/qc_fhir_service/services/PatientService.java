@@ -15,9 +15,12 @@ import java.util.List;
 
 @Service
 public class PatientService {
+  
     @Autowired
     private IGenericClient fhirClient;
+  
     private final FhirContext fhirContext = FhirContext.forR5();
+  
     public String createPatient(String patient) {
         IParser parser =  fhirContext.newJsonParser();
         Patient nuevoPaciente = parser.parseResource(Patient.class, patient);
@@ -28,9 +31,11 @@ public class PatientService {
     public Patient getPatientById(String id) {
         return fhirClient.read().resource(Patient.class).withId(id).execute();
     }
+  
     public Bundle getAllPatients() {
         return fhirClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
     }
+
     public JSONArray getAllPatientsCedulas(){
         List<JSONObject> pacientesJson = new ArrayList<>();
         Bundle pacientes = fhirClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
