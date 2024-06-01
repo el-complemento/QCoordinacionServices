@@ -71,10 +71,9 @@ public class ServiceRequestService {
             }
             return (ServiceRequest) outcome.getResource();
         }
-
     }
 
-    public JSONArray fetchOnHoldServiceRequestsWithBasedOnNull() {
+    public JSONArray fetchServiceRequestsWithBasedOnNull() {
         List<JSONObject> ordenesJson = new ArrayList<>();
         // Recupera todos los ServiceRequest
         Bundle results = fhirClient
@@ -88,13 +87,13 @@ public class ServiceRequestService {
             ServiceRequest serviceRequest = (ServiceRequest) entry.getResource();
 
             // Verifica si el status es 'active' y si based-on es null o está vacío
-            if (serviceRequest.getAuthoredOn()!=null&&serviceRequest.getOccurrence()!=null && serviceRequest.getPriority() != null && "On Hold".equals(serviceRequest.getStatus().getDisplay()) &&
+            if (serviceRequest.getAuthoredOn() != null && serviceRequest.getOccurrence() != null && serviceRequest.getPriority() != null &&
                     (serviceRequest.getBasedOn() == null || serviceRequest.getBasedOn().isEmpty())) {
                 JSONObject objeto = new JSONObject();
                 String prioridad = serviceRequest.getPriority().getDisplay();
                 String horasEstimadas = serviceRequest.getOccurrenceTiming().getRepeat().getDuration().toPlainString();
                 List<String> participantes = new ArrayList<>();
-                for(Coding participantesRoles : serviceRequest.getPerformerType().getCoding()){
+                for (Coding participantesRoles : serviceRequest.getPerformerType().getCoding()) {
                     participantes.add(participantesRoles.getDisplay());
                 }
                 objeto.accumulate("idOrden", serviceRequest.getIdPart());
@@ -104,11 +103,10 @@ public class ServiceRequestService {
                 objeto.accumulate("rolesNecesarios", participantes);
                 objeto.accumulate("fechaPedido", serviceRequest.getAuthoredOn());
                 objeto.accumulate("paciente", obtenerPaciente(serviceRequest));
+                objeto.accumulate("status", serviceRequest.getStatus().getDisplay());
                 ordenesJson.add(objeto);
             }
         }
-
-
 
         return new JSONArray(ordenesJson);
     }
@@ -118,9 +116,9 @@ public class ServiceRequestService {
         Reference paciente = orden.getSubject();
         String id = paciente.getReference().substring(paciente.getReference().lastIndexOf("/") + 1);
         Patient pacienteEntidad = fhirClient.read().resource(Patient.class).withId(id).execute();
-        nombreCompleto=nombreCompleto.concat(String.valueOf(pacienteEntidad.getName().get(0).getGiven().get(0)));
-        nombreCompleto=nombreCompleto.concat(" ");
-        nombreCompleto=nombreCompleto.concat((pacienteEntidad.getName().get(0).getFamily()));
+        nombreCompleto = nombreCompleto.concat(String.valueOf(pacienteEntidad.getName().get(0).getGiven().get(0)));
+        nombreCompleto = nombreCompleto.concat(" ");
+        nombreCompleto = nombreCompleto.concat((pacienteEntidad.getName().get(0).getFamily()));
         return nombreCompleto;
     }
 }
