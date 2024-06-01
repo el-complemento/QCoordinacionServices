@@ -20,17 +20,20 @@ public class QcApiGatewayServiceApplication {
 
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
-		String url = "lb://qc-fhir-service";
-		RouteLocator rutasFhirService = builder.routes()
-				.route(r -> r.path("/api/v1/patients/**").uri(url))
-				.route(r -> r.path("/api/v1/practicioners/**").uri(url))
-				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(url))
-				.route(r -> r.path("/api/v1/service-requests/**").uri(url))
-				.route(r -> r.path("/api/v1/encounters/**").uri(url))
-				.route(r -> r.path("/api/v1/locations/**").uri(url))
+		String urlFhirBackend = "lb://qc-fhir-service";
+		String urlALgoritmo = "lb://qc-algoritmo";
+		return builder.routes()
+				.route(r -> r.path("/api/v1/patients/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/practicioners/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/service-requests/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/encounters/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/locations/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/appointments/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/algoritmo/**").uri(urlALgoritmo))
 				.build();
-		return rutasFhirService;
 	}
+
 
 	@Bean
 	public CorsFilter corsFilter() {
