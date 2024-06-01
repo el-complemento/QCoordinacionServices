@@ -17,16 +17,16 @@ public class AlgoritmoService {
     private final RestTemplate restTemplate;
     private final FhirContext fhirContext = FhirContext.forR5();
     IParser parser =  fhirContext.newJsonParser();
-    static final String URL_SERVICE_REQUESTS = "lb://qcoordinacion-fhir-service/api/v1/service-requests/active/no-based-on";
-    static final String URL_APPOINTMENTS = "lb://qcoordinacion-fhir-service/api/v1/appointments";
-    static final String URL_ENCOUNTERS = "lb://qcoordinacion-fhir-service/api/v1/encounters";
-    static final String URL_LOCATIONS = "lb://qcoordinacion-fhir-service/api/v1/locations";
-    static final String URL_PATIENTS = "lb://qcoordinacion-fhir-service/api/v1/patients";
-    static final String URL_PRACTITIONERS = "lb://qcoordinacion-fhir-service/api/v1/practitioners";
-    static final String URL_PRACTITIONER_ROLES = "lb://qcoordinacion-fhir-service/api/v1/practitioner-roles";
+    static final String URL_SERVICE_REQUESTS = "lb://qc-fhir-service/api/v1/service-requests/active/no-based-on";
+    static final String URL_APPOINTMENTS = "lb://qc-fhir-service/api/v1/appointments";
+    static final String URL_ENCOUNTERS = "lb://qc-fhir-service/api/v1/encounters";
+    static final String URL_LOCATIONS = "lb://qc-fhir-service/api/v1/locations";
+    static final String URL_PATIENTS = "lb://qc-fhir-service/api/v1/patients";
+    static final String URL_PRACTITIONERS = "lb://qc-fhir-service/api/v1/practitioners";
+    static final String URL_PRACTITIONER_ROLES = "lb://qc-fhir-service/api/v1/practitioner-roles";
 
     @Autowired
-    public AlgoritmoService(RestTemplate restTemplate) {
+    public AlgoritmoService(RestTemplate restTemplate   ) {
         this.restTemplate = restTemplate;
     }
 

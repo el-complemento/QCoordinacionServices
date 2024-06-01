@@ -64,6 +64,11 @@ public class ServiceRequestController {
         Bundle serviceRequestsDeFechaHaciaAdelante = serviceRequestService.getServiceRequestsFromDate(fecha);
         return ResponseEntity.ok(serviceRequestsDeFechaHaciaAdelante);
     }
+    @GetMapping("/active/no-based-on")
+    public ResponseEntity<String> getActiveServiceRequestsWithoutBasedOn() {
+        JSONArray ids = serviceRequestService.fetchActiveServiceRequestsWithBasedOnNull();
+        return ResponseEntity.ok(ids.toString());
+    }
 
     @GetMapping("/fecha/id/{fecha}")
     public ResponseEntity<List<String>> getServiceRequestIdByDate(@PathVariable String fecha) {

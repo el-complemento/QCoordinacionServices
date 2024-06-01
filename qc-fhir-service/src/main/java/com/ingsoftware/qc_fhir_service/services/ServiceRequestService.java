@@ -40,6 +40,41 @@ public class ServiceRequestService {
                 .returnBundle(Bundle.class)
                 .execute();
     }
+    public JSONArray fetchActiveServiceRequestsWithBasedOnNull() {
+        List<JSONObject> ordenesJson = new ArrayList<>();
+        // Recupera todos los ServiceRequest
+        Bundle results = fhirClient
+                .search()
+                .forResource(ServiceRequest.class)
+                .returnBundle(Bundle.class)
+                .count(1000000) // OJO CON ESTO ES EL LIMITE DE LA CANTIDAD DE COSAS QUE PUEDE VENIR EN UN BUNDLE ESTA POR DEFECTO EN 20
+                .execute();
+        // Itera sobre cada entrada del Bundle
+        for (Bundle.BundleEntryComponent entry : results.getEntry()) {
+            ServiceRequest serviceRequest = (ServiceRequest) entry.getResource();
+
+            // Verifica si el status es 'active' y si based-on es null o está vacío
+            if (serviceRequest.getAuthoredOn()!=null&&serviceRequest.getOccurrence()!=null && serviceRequest.getPriority() != null &&"Active".equals(serviceRequest.getStatus().getDisplay()) &&
+                    (serviceRequest.getBasedOn() == null || serviceRequest.getBasedOn().isEmpty())) {
+                JSONObject objeto = new JSONObject();
+                String prioridad = serviceRequest.getPriority().getDisplay();
+                String horasEstimadas = serviceRequest.getOccurrenceTiming().getRepeat().getDuration().toPlainString();
+                List<String> participantes = new ArrayList<>();
+                for(Coding participantesRoles : serviceRequest.getPerformerType().getCoding()){
+                    participantes.add(participantesRoles.getCode());
+                }
+                objeto.accumulate("idOrden", serviceRequest.getIdPart());
+                objeto.accumulate("prioridad", prioridad);
+                objeto.accumulate("horasEstimadas", horasEstimadas);
+                objeto.accumulate("rolesNecesarios", participantes);
+                objeto.accumulate("fechaPedido", serviceRequest.getAuthoredOn());
+                ordenesJson.add(objeto);
+            }
+        }
+
+
+        return new JSONArray(ordenesJson);
+    }
 
     public ServiceRequest markServiceRequestAsCompleted(String id) {
         ServiceRequest serviceRequest = getServiceRequestById(id);
