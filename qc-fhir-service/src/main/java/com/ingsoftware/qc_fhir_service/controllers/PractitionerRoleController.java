@@ -2,6 +2,7 @@ package com.ingsoftware.qc_fhir_service.controllers;
 
 import ca.uhn.fhir.rest.annotation.Search;
 import com.ingsoftware.qc_fhir_service.services.PractitionerRoleService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.r5.model.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/practitioner-roles")
+@Hidden
 public class PractitionerRoleController {
         @Autowired
         private PractitionerRoleService practitionerRoleService;

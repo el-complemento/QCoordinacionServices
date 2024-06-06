@@ -2,6 +2,7 @@ package com.ingsoftware.qc_fhir_service.controllers;
 
 
 import com.ingsoftware.qc_fhir_service.services.LocationService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/locations")
+@Hidden
 public class LocationController {
     @Autowired
     private LocationService locationService;

@@ -1,6 +1,7 @@
 package com.ingsoftware.qc_fhir_service.controllers;
 
 import com.ingsoftware.qc_fhir_service.services.PractitionerService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.hl7.fhir.r5.model.Practitioner;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/practicioners")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}) // Configura los orígenes permitidos
+@Hidden
 public class PractitionerController {
     @Autowired
     private PractitionerService practitionerService;

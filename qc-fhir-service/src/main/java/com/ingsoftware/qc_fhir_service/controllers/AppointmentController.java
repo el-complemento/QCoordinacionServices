@@ -1,6 +1,7 @@
 package com.ingsoftware.qc_fhir_service.controllers;
 
 import com.ingsoftware.qc_fhir_service.services.AppointmentService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/appointments")
 @RestController
+@Hidden
 public class AppointmentController {
 
     @Autowired

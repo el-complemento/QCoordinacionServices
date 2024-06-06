@@ -1,5 +1,7 @@
 package com.ingsoftware.qc_fhir_service.controllers;
+
 import com.ingsoftware.qc_fhir_service.services.PatientService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.hl7.fhir.r5.model.Bundle;
 import org.hl7.fhir.r5.model.Patient;
 import org.json.JSONArray;
@@ -7,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/patients")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8081"}) // Configura los orígenes permitidos
+@Hidden
 public class PatientController {
 
     @Autowired

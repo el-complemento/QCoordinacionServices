@@ -1,6 +1,7 @@
 package com.ingsoftware.qc_fhir_service.controllers;
 
 import com.ingsoftware.qc_fhir_service.services.ServiceRequestService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.hl7.fhir.r5.model.Bundle;
 import org.hl7.fhir.r5.model.Resource;
 import org.hl7.fhir.r5.model.ServiceRequest;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/service-requests")
+@Hidden
 public class ServiceRequestController {
 
     @Autowired
