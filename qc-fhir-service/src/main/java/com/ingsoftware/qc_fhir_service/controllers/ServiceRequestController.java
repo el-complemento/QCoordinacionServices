@@ -7,7 +7,6 @@ import org.hl7.fhir.r5.model.ServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -21,6 +20,11 @@ public class ServiceRequestController {
     @Autowired
     private ServiceRequestService serviceRequestService;
 
+    @GetMapping("/preoperatorios")
+    public ResponseEntity<String> getPreoperatorios(){
+        JSONArray preoperatorios = serviceRequestService.getPreoperatorios();
+        return ResponseEntity.ok(preoperatorios.toString());
+    }
     @GetMapping
     public ResponseEntity<String> getServiceRequestsWithoutBasedOn() {
         JSONArray ids = serviceRequestService.fetchServiceRequestsWithBasedOnNull();
@@ -89,5 +93,10 @@ public class ServiceRequestController {
     public ResponseEntity<String> markServiceRequestAsCompleted(@PathVariable String id) {
         ServiceRequest serviceRequestFunciono = serviceRequestService.markServiceRequestAsCompleted(id);
         return ResponseEntity.ok(serviceRequestFunciono.toString());
+    }
+    @GetMapping("/draft/{id}")
+    public ResponseEntity<String> markServiceRequestAsDraft(@PathVariable String id) {
+        serviceRequestService.markServiceRequestAsDraft(id);
+        return ResponseEntity.ok("ESTADO DE SERVICE REQUEST CAMBIADO");
     }
 }

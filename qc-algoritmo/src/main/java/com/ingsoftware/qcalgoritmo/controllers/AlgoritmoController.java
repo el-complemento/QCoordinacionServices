@@ -1,7 +1,6 @@
 package com.ingsoftware.qcalgoritmo.controllers;
 
 import com.ingsoftware.qcalgoritmo.services.AlgoritmoService;
-import lombok.extern.flogger.Flogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,6 @@ public class AlgoritmoController {
     @GetMapping
     public ResponseEntity<String> algoritmoTime(){
         algoritmoService.processRequests();
-        return ResponseEntity.ok("joya");
+        return ResponseEntity.ok("True");
     }
 }

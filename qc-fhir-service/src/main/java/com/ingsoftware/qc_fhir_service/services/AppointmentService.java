@@ -17,9 +17,10 @@ public class AppointmentService {
     @Autowired
     private IGenericClient fhirClient;
     private final FhirContext fhirContext = FhirContext.forR5();
+    public IParser parser = fhirContext.newJsonParser();
+
     public String createAppointment(String appointment) {
-        IParser parser = fhirContext.newJsonParser();
-        Appointment nuevoAppointment = parser.parseResource(Appointment.class, appointment);
+        Appointment nuevoAppointment = (Appointment) parser.parseResource(appointment);
         MethodOutcome outcome = fhirClient.create().resource(nuevoAppointment).execute();
         return outcome.getId().getIdPart();
     }
