@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.ingsoftware.qc_fhir_service.services.EncounterService.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -22,6 +24,35 @@ public class ServiceRequestService {
 
     private final FhirContext fhirContext = FhirContext.forR5();
 
+    public JSONArray getPreoperatorios(){
+        List<JSONObject> ordenesJson = new ArrayList<>();
+        // Recupera todos los ServiceRequest
+        Bundle results = fhirClient
+                .search()
+                .forResource(ServiceRequest.class)
+                .returnBundle(Bundle.class)
+                .count(1000000) // OJO CON ESTO ES EL LIMITE DE LA CANTIDAD DE COSAS QUE PUEDE VENIR EN UN BUNDLE ESTA POR DEFECTO EN 20
+                .execute();
+        // Itera sobre cada entrada del Bundle
+        for (Bundle.BundleEntryComponent entry : results.getEntry()) {
+            ServiceRequest serviceRequest = (ServiceRequest) entry.getResource();
+
+            // Verifica si el status es 'active' y si based-on es null o está vacío
+            if ( serviceRequest.getBasedOn().size()==1) {
+                JSONObject objeto = new JSONObject();
+                String prioridad = serviceRequest.getPriority().getDisplay();
+                objeto.accumulate("idOrden", serviceRequest.getIdPart());
+                objeto.accumulate("idOrdenPadre", serviceRequest.getBasedOn().get(0).getReference());
+                objeto.accumulate("prioridad", prioridad);
+                objeto.accumulate("fechaPedido", serviceRequest.getAuthoredOn());
+                objeto.accumulate("title",serviceRequest.getCode().getConcept().getText());
+                objeto.accumulate("paciente",serviceRequest.getSubject().getReference());
+                objeto.accumulate("doctor", serviceRequest.getRequester().getReference());
+                ordenesJson.add(objeto);
+            }
+        }
+        return new JSONArray(ordenesJson);
+    }
     public String createServiceRequest(String serviceRequest) {
         IParser parser = fhirContext.newJsonParser();
         ServiceRequest nuevaServiceRequest = parser.parseResource(ServiceRequest.class, serviceRequest);
@@ -33,14 +64,54 @@ public class ServiceRequestService {
         // Obtiene el paciente por su ID desde el servidor FHIR
         return fhirClient.read().resource(ServiceRequest.class).withId(id).execute();
     }
-
     public Bundle getServiceRequestsFromDate(String date) {
         return fhirClient.search().forResource(ServiceRequest.class)
                 .where(new DateClientParam("authored").afterOrEquals().day(date))
                 .returnBundle(Bundle.class)
                 .execute();
     }
+    public JSONArray fetchActiveServiceRequestsWithBasedOnNull() {
+        List<JSONObject> ordenesJson = new ArrayList<>();
+        // Recupera todos los ServiceRequest
+        Bundle results = fhirClient
+                .search()
+                .forResource(ServiceRequest.class)
+                .returnBundle(Bundle.class)
+                .count(1000000) // OJO CON ESTO ES EL LIMITE DE LA CANTIDAD DE COSAS QUE PUEDE VENIR EN UN BUNDLE ESTA POR DEFECTO EN 20
+                .execute();
+        // Itera sobre cada entrada del Bundle
+        for (Bundle.BundleEntryComponent entry : results.getEntry()) {
+            ServiceRequest serviceRequest = (ServiceRequest) entry.getResource();
 
+            // Verifica si el status es 'active' y si based-on es null o está vacío
+            if (serviceRequest.getAuthoredOn()!=null&&serviceRequest.getOccurrence()!=null && serviceRequest.getPriority() != null &&"Active".equals(serviceRequest.getStatus().getDisplay()) &&
+                    (serviceRequest.getBasedOn() == null || serviceRequest.getBasedOn().isEmpty())) {
+                JSONObject objeto = new JSONObject();
+                String prioridad = serviceRequest.getPriority().getDisplay();
+                String horasEstimadas = serviceRequest.getOccurrenceTiming().getRepeat().getDuration().toPlainString();
+                List<String> participantes = new ArrayList<>();
+                for(Coding participantesRoles : serviceRequest.getPerformerType().getCoding()){
+                    participantes.add(participantesRoles.getDisplay());
+                }
+                objeto.accumulate("idOrden", serviceRequest.getIdPart());
+                objeto.accumulate("prioridad", prioridad);
+                objeto.accumulate("horasEstimadas", horasEstimadas);
+                objeto.accumulate("rolesNecesarios", participantes);
+                objeto.accumulate("fechaPedido", serviceRequest.getAuthoredOn());
+                objeto.accumulate("title",serviceRequest.getCode().getConcept().getText());
+                objeto.accumulate("paciente",serviceRequest.getSubject().getReference());
+                ordenesJson.add(objeto);
+            }
+        }
+
+
+        return new JSONArray(ordenesJson);
+    }
+    public void markServiceRequestAsDraft(String id) {
+        ServiceRequest serviceRequest = getServiceRequestById(id);
+        serviceRequest.setStatus(Enumerations.RequestStatus.DRAFT);
+        fhirClient.update().resource(serviceRequest).execute();
+    }
     public ServiceRequest markServiceRequestAsCompleted(String id) {
         ServiceRequest serviceRequest = getServiceRequestById(id);
 
@@ -121,5 +192,6 @@ public class ServiceRequestService {
         nombreCompleto = nombreCompleto.concat((pacienteEntidad.getName().get(0).getFamily()));
         return nombreCompleto;
     }
+
 }
 

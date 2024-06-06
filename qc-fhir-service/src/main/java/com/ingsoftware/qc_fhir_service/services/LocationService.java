@@ -4,15 +4,15 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import org.hl7.fhir.r5.model.Availability;
-import org.hl7.fhir.r5.model.IdType;
-import org.hl7.fhir.r5.model.Location;
-import org.hl7.fhir.r5.model.Bundle;
+import org.hl7.fhir.r5.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,6 +27,8 @@ public class LocationService {
         MethodOutcome outcome = fhirClient.create().resource(nuevoQuirofano).execute();
         return outcome.getId().getIdPart();
     }
+    
+
     public JSONArray getAllQuirofanosDisponibilidad() {
         IParser parser = fhirContext.newJsonParser();
 
@@ -79,5 +81,46 @@ public class LocationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void updateLocationAvailability(String locationId, LocalDateTime start, LocalDateTime end) {
+        try {
+            // Create an IdType for the operating room resource
+            IdType resourceId = new IdType("Location", locationId);
+
+            // Use PATCH operation to update the existing resource
+            Location existingLocation = fhirClient.read().resource(Location.class).withId(resourceId).execute();
+
+            if (existingLocation == null) {
+                throw new IllegalArgumentException("Location not found");
+            }
+
+            // Check if HoursOfOperation exists, create if not
+            if (existingLocation.getHoursOfOperation() == null || existingLocation.getHoursOfOperation().isEmpty()) {
+                existingLocation.addHoursOfOperation();
+            }
+
+            // Get the first (and likely only) HoursOfOperation element
+            Availability hoursOfOperation = existingLocation.getHoursOfOperation().get(0);
+            Date startEnDate = convertToDate(start);
+            Date endEnDate = convertToDate(end);
+            // Create a new NotAvailableTimeComponent with start and end times
+            Availability.AvailabilityNotAvailableTimeComponent notAvailableTime =
+                    new Availability.AvailabilityNotAvailableTimeComponent();
+            notAvailableTime.setDuring(new Period().setStart(startEnDate).setEnd(endEnDate));
+
+            // Append the new NotAvailableTimeComponent to the existing list
+            hoursOfOperation.addNotAvailableTime(notAvailableTime);
+
+            // Update the Location resource with the modified HoursOfOperation
+            fhirClient.update().resource(existingLocation).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating location availability: " + e.getMessage());
+        }
+    }
+    public Date convertToDate(LocalDateTime localDateTime) {
+        // Considerando que la fecha y hora son en zona UTC
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

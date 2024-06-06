@@ -1,6 +1,7 @@
 package com.ingsoftware.qc_fhir_service.controllers;
 
 import com.ingsoftware.qc_fhir_service.services.AppointmentService;
+import org.hl7.fhir.r5.model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

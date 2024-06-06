@@ -2,12 +2,15 @@ package com.ingsoftware.qc_fhir_service.controllers;
 
 import ca.uhn.fhir.rest.annotation.Search;
 import com.ingsoftware.qc_fhir_service.services.PractitionerRoleService;
+import lombok.Getter;
+import lombok.Setter;
 import org.hl7.fhir.r5.model.*;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +22,18 @@ public class PractitionerRoleController {
 
         @GetMapping
         public ResponseEntity<String> getDisponiblidades() {
-            JSONArray getDisponibilidades = practitionerRoleService.getDisponiblidadesRoles();
+            JSONArray getDisponibilidades = practitionerRoleService.getDisponibilidadesRoles();
             return ResponseEntity.ok(getDisponibilidades.toString());
         }
         @PostMapping
         public ResponseEntity<String> createPractitionerRole(@RequestBody String practitioner) {
             String practitionerRoleId = practitionerRoleService.createPractitionerRole(practitioner);
             return ResponseEntity.ok(": " + practitionerRoleId);
+        }
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> deleteRole(@PathVariable String id) {
+            practitionerRoleService.deleteRoleById(id);
+            return ResponseEntity.ok("DELETED");
         }
 
         @GetMapping("/rol/{id}")
@@ -61,5 +69,23 @@ public class PractitionerRoleController {
                }
             }
             return ResponseEntity.ok(cedulas);
+        }
+        @PostMapping("/{practitionerId}/updateAvailability")
+        public ResponseEntity<?> updateMedicoAvailability(@PathVariable String practitionerId,
+                                                        @RequestBody PractitionerRoleController.UpdateAvailabilityRequest request) {
+            try {
+                practitionerRoleService.updatePractitionerRoleAvailability(practitionerId, request.getStart(), request.getEnd());
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Error updating location availability: " + e.getMessage());
+            }
+        }
+
+
+        @Setter
+        @Getter
+        public static class UpdateAvailabilityRequest {
+            private LocalDateTime start;
+            private LocalDateTime end;
         }
 }

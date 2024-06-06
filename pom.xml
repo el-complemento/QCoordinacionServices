@@ -24,7 +24,6 @@
 	</properties>
 
 	<modules>
-		<module>qc-receptor-ordenes-service</module>
 		<module>qc-fhir-service</module>
 		<module>qc-algoritmo</module>
 		<module>qc-api-gateway-service</module>
