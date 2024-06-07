@@ -42,12 +42,13 @@ public class ServiceRequestService {
                 JSONObject objeto = new JSONObject();
                 String prioridad = serviceRequest.getPriority().getDisplay();
                 objeto.accumulate("idOrden", serviceRequest.getIdPart());
-                objeto.accumulate("idOrdenPadre", serviceRequest.getBasedOn().get(0).getReference());
+                objeto.accumulate("idOrdenPadre", serviceRequest.getBasedOn().get(0).getReference().split("/")[1]);
                 objeto.accumulate("prioridad", prioridad);
                 objeto.accumulate("fechaPedido", serviceRequest.getAuthoredOn());
                 objeto.accumulate("title",serviceRequest.getCode().getConcept().getText());
                 objeto.accumulate("paciente",serviceRequest.getSubject().getReference());
                 objeto.accumulate("doctor", serviceRequest.getRequester().getReference());
+                objeto.accumulate("status", serviceRequest.getStatus().getDisplay());
                 ordenesJson.add(objeto);
             }
         }
