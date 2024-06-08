@@ -20,17 +20,16 @@ public class QcApiGatewayServiceApplication {
 
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
-		String urlFhirBackend = "lb://qc-fhir-service";
-		String urlALgoritmo = "lb://qc-algoritmo";
+		String urlMessageBroker = "lb://qc-message-broker-service";
 		return builder.routes()
-				.route(r -> r.path("/api/v1/patients/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/practicioners/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/service-requests/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/encounters/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/locations/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/appointments/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/algoritmo/**").uri(urlALgoritmo))
+				.route(r -> r.path("/api/v1/patients/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/practicioners/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/service-requests/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/encounters/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/locations/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/appointments/**").uri(urlMessageBroker))
+				.route(r -> r.path("/api/v1/algoritmo/**").uri(urlMessageBroker)) // Assuming the algorithm also interacts with the message broker
 				.build();
 	}
 
