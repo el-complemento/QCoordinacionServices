@@ -5,6 +5,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
 
+
 spring:
   cloud:
     gateway:
@@ -15,3 +16,8 @@ spring:
             allowedMethods: "GET,POST,PUT,DELETE"
             allowedHeaders: "*"
             allowCredentials: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest

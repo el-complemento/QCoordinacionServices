@@ -73,6 +73,10 @@
 			<artifactId>hapi-fhir-structures-r5</artifactId>
 			<version>6.8.0</version> <!-- Make sure to use the correct and latest version -->
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
