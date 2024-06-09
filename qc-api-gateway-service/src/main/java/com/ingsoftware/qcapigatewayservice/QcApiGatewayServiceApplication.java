@@ -24,13 +24,12 @@ public class QcApiGatewayServiceApplication {
 		String urlFhirBackend = "lb://qc-fhir-service";
 		String urlALgoritmo = "lb://qc-algoritmo";
 		return builder.routes()
-				.route(r -> r.path("/api/v1/patients/**").uri(urlFhirBackend))
+				.route(r -> r.path("/api/v1/patients/**")
+						.filters(f -> f.filter(postToRabbitMQFilter.apply(new PostToRabbitMQFilter.Config())))
+						.uri(urlFhirBackend))
 				.route(r -> r.path("/api/v1/practicioners/**").uri(urlFhirBackend))
 				.route(r -> r.path("/api/v1/practitioner-roles/**").uri(urlFhirBackend))
 				.route(r -> r.path("/api/v1/service-requests/**").uri(urlFhirBackend))
-				.route(r -> r.path("/api/v1/service-requests/**")
-						.filters(f -> f.filter(postToRabbitMQFilter.apply(new PostToRabbitMQFilter.Config())))
-						.uri("lb://qc-fhir-service"))
 				.route(r -> r.path("/api/v1/encounters/**").uri(urlFhirBackend))
 				.route(r -> r.path("/api/v1/locations/**").uri(urlFhirBackend))
 				.route(r -> r.path("/api/v1/appointments/**").uri(urlFhirBackend))

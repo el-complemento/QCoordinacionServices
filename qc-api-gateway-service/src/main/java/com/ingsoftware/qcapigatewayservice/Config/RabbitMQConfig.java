@@ -12,7 +12,7 @@ public class RabbitMQConfig {
 
     @Bean
     Queue queue() {
-        return new Queue("surgeryQueue", false);
+        return new Queue("surgeryQueue", true);
     }
 
     @Bean
