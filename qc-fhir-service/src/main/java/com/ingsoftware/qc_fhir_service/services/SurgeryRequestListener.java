@@ -14,7 +14,7 @@ public class SurgeryRequestListener {
         this.patientService = patientService;
     }
 
-    @RabbitListener(queues = "surgeryQueue")
+    @RabbitListener(queues = "PatientQueue")
     public void receiveMessage(String message) {
         System.out.println("Received message from RabbitMQ: " + message);
         patientService.createPatient(message);

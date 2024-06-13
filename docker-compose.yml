@@ -1,27 +1,15 @@
-version: '3'
+version: '3.8'
 
 services:
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: rabbitmq
+    container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
       - "5672:5672"  # Exponer RabbitMQ al host
       - "15672:15672"  # Exponer la interfaz de gestión al host
-
-  myapp:
-    build: .
-    environment:
-      SPRING_RABBITMQ_HOST: rabbitmq  # Nombre del servicio RabbitMQ
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: guest
-      SPRING_RABBITMQ_PASSWORD: guest
-    depends_on:
-      - rabbitmq
-    ports:
-      - "2929:8080"
 
 
   keycloak:
@@ -47,7 +35,3 @@ services:
       - 8181:8181
     expose:
       - 8181
-
-# Names our volume
-volumes:
-  qcoordinaciondb:
