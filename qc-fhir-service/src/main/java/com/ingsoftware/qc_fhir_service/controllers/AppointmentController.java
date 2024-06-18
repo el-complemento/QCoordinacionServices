@@ -1,12 +1,10 @@
 package com.ingsoftware.qc_fhir_service.controllers;
 
 import com.ingsoftware.qc_fhir_service.services.AppointmentService;
-import org.hl7.fhir.r5.model.Appointment;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/api/v1/appointments")
 @RestController
@@ -25,9 +23,10 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.acceptAppointment(id));
     }
     @GetMapping("/recomendadas")
-    public ResponseEntity<List<String>> mostrarAppointmentsRecomendadas(){
-        return ResponseEntity.ok(appointmentService.mostrarAppointmentsPlaneados());
+    public ResponseEntity<String> mostrarAppointmentsRecomendadas(){
+        return ResponseEntity.ok(appointmentService.mostrarAppointmentsPlaneados().toString());
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEncounter(@PathVariable String id) {
         appointmentService.deleteAppointmentById(id);

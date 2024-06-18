@@ -16,6 +16,6 @@ public class AlgoritmoController {
     @GetMapping
     public ResponseEntity<String> algoritmoTime(){
         algoritmoService.processRequests();
-        return ResponseEntity.ok("True");
+        return ResponseEntity.ok("true");
     }
 }

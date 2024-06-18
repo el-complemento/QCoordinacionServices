@@ -73,7 +73,7 @@ public class AlgoritmoService {
 
         // Ordenador de fechas
         Comparator<JSONObject> dateComparator = (o1, o2) -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
             try {
                 Date date1 = sdf.parse(o1.getString("fechaPedido"));
                 Date date2 = sdf.parse(o2.getString("fechaPedido"));
@@ -82,6 +82,7 @@ public class AlgoritmoService {
                 throw new RuntimeException("Error parsing date", e);
             }
         };
+
 
         // Ordenar las listas
         ordenesPrioridadUrgente.sort(dateComparator);
@@ -191,7 +192,7 @@ public class AlgoritmoService {
     }
     public boolean isMedicoDisponible(JSONArray disponiblidad, LocalDateTime fechaInicio, LocalDateTime fechaFinal) {
         // Crear un DateTimeFormatter que coincida con el formato de la cadena de fecha
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         for (int i = 0; i < disponiblidad.length(); i++) {
             JSONObject availability = disponiblidad.getJSONObject(i);
@@ -240,7 +241,7 @@ public class AlgoritmoService {
                     LocalDateTime unavailableEnd = LocalDateTime.parse(endString,formatter);
 
                     // Check if desired appointment overlaps with unavailable time
-                    if (fechaInicio.isBefore(unavailableEnd) && fechaFinal.isAfter(unavailableStart)) {
+                    if ((fechaInicio.isBefore(unavailableEnd) || fechaInicio.isEqual(unavailableEnd)) && (fechaFinal.isAfter(unavailableStart) || fechaFinal.isEqual(unavailableStart))) {
                         return false; // Appointment overlaps with unavailable time
                     }
                 }

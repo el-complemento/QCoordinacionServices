@@ -5,6 +5,8 @@ import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import org.hl7.fhir.r5.model.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,10 @@ public class AppointmentService {
     }
     public String acceptAppointment(String idAppointment) {
         Appointment appointmentAceptada = fhirClient.read().resource(Appointment.class).withId(idAppointment).execute();
+
+        // Cambiando estado de la appointment aceptada
+        appointmentAceptada.setStatus(Appointment.AppointmentStatus.BOOKED);
+
         Encounter nuevoEncounter = new Encounter();
         nuevoEncounter.setBasedOn(appointmentAceptada.getBasedOn());
         nuevoEncounter.setStatus(Enumerations.EncounterStatus.PLANNED);
@@ -50,49 +56,61 @@ public class AppointmentService {
             }
         }
         MethodOutcome outcome = fhirClient.create().resource(nuevoEncounter).execute();
+
+        fhirClient.update().resource(appointmentAceptada).execute();
+
         return outcome.getId().getIdPart();
     }
-    public List<String> mostrarAppointmentsPlaneados(){
+    public JSONArray mostrarAppointmentsPlaneados() {
         IParser parser = fhirContext.newJsonParser();
-        List<String> appointmentsJson = new ArrayList<>();
-        Bundle appointments = fhirClient.search().forResource(Appointment.class).where(Appointment.STATUS.exactly().code("proposed")).returnBundle(Bundle.class).execute();
+        JSONArray appointmentsJson = new JSONArray();
+        Bundle appointments = fhirClient.search().forResource(Appointment.class)
+                .where(Appointment.STATUS.exactly().code("proposed"))
+                .returnBundle(Bundle.class).execute();
+
         for (Bundle.BundleEntryComponent entry : appointments.getEntry()) {
             Appointment appointment = (Appointment) entry.getResource();
+            JSONObject appointmentObj = new JSONObject();
             String startDate = appointment.getStart().toString();
             String endDate = appointment.getEnd().toString();
             String prioridad = appointment.getPriority().getCoding().get(0).getCode();
-            List<String> doctores =new ArrayList<>();
+            JSONArray doctores = new JSONArray();
             String paciente = appointment.getSubject().getReference().split("/")[1];
-            String quirofano ="";
+            String quirofano = "";
             String idOrden = appointment.getBasedOn().get(0).getReference().split("/")[1];
+
             for (Appointment.AppointmentParticipantComponent participantComponent : appointment.getParticipant()) {
                 if (Objects.equals(participantComponent.getActor().getReference().split("/")[0], "Practitioner")) {
-                    Practitioner practitioner = fhirClient.read().resource(Practitioner.class).withId(participantComponent.getActor().getReference().split("/")[1]).execute();
-                    String nombreCompleto="";
-                    nombreCompleto=nombreCompleto.concat(String.valueOf(practitioner.getName().get(0).getGiven().get(0)));
-                    nombreCompleto=nombreCompleto.concat(" ");
-                    nombreCompleto=nombreCompleto.concat((practitioner.getName().get(0).getFamily()));
-                    doctores.add(nombreCompleto);
-                }
-                else {
-                     quirofano=participantComponent.getActor().getReference().split("/")[1];
+                    Practitioner practitioner = fhirClient.read().resource(Practitioner.class)
+                            .withId(participantComponent.getActor().getReference().split("/")[1])
+                            .execute();
+                    String nombreCompleto = practitioner.getName().get(0).getGiven().get(0) + " " + practitioner.getName().get(0).getFamily();
+                    doctores.put(nombreCompleto);
+                } else {
+                    quirofano = participantComponent.getActor().getReference().split("/")[1];
                 }
             }
-            ServiceRequest orden=fhirClient.read().resource(ServiceRequest.class).withId(appointment.getBasedOn().get(0).getReference().split("/")[1]).execute();
-            String title= orden.getCode().getConcept().getText();
-            String json = String.format("{title: '%s', start: '%s', end: '%s', priority: '%s', doctores: %s, paciente: '%s', idOrden: '%s', quirofano: '%s'}",
-                    title,
-                    startDate,
-                    endDate,
-                    prioridad,
-                    doctores,
-                    paciente,
-                    idOrden,
-                    quirofano); // Se añade el campo quirofano aquí
-            appointmentsJson.add(json);
+
+            ServiceRequest orden = fhirClient.read().resource(ServiceRequest.class)
+                    .withId(appointment.getBasedOn().get(0).getReference().split("/")[1])
+                    .execute();
+            String title = orden.getCode().getConcept().getText();
+
+            appointmentObj.put("title", title);
+            appointmentObj.put("start", startDate);
+            appointmentObj.put("end", endDate);
+            appointmentObj.put("priority", prioridad);
+            appointmentObj.put("doctores", doctores);
+            appointmentObj.put("paciente", paciente);
+            appointmentObj.put("idOrden", idOrden);
+            appointmentObj.put("quirofano", quirofano);
+            appointmentObj.put("idAppontment", appointment.getIdPart());
+
+            appointmentsJson.put(appointmentObj);
         }
         return appointmentsJson;
     }
+
     public void deleteAppointmentById(String appointmentId) {
         try {
             // Crear el IdType con el tipo de recurso y el ID

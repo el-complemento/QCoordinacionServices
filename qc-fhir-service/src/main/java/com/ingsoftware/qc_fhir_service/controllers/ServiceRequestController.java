@@ -92,7 +92,7 @@ public class ServiceRequestController {
     @PutMapping("/{id}")
     public ResponseEntity<String> markServiceRequestAsCompleted(@PathVariable String id) {
         ServiceRequest serviceRequestFunciono = serviceRequestService.markServiceRequestAsCompleted(id);
-        return ResponseEntity.ok(serviceRequestFunciono.toString());
+        return ResponseEntity.ok("true");
     }
     @GetMapping("/draft/{id}")
     public ResponseEntity<String> markServiceRequestAsDraft(@PathVariable String id) {
