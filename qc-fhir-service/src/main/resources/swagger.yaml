@@ -1,0 +1,845 @@
+openapi: 3.0.0
+info:
+  title: API de Pacientes
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor local
+
+tags:
+  - name: PatientController
+  - name: ServiceRequestController
+  - name: PractitionerController
+  - name: PractitionerRoleController
+  - name: LocationController
+  - name: AppointmentController
+
+paths:
+  /patients:
+    put:
+      tags:
+        - PatientController
+      summary: Crear un nuevo paciente
+      description: Crear un nuevo paciente con los detalles proporcionados.
+      requestBody:
+        description: Objeto Paciente que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        '200':
+          description: Paciente creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      tags:
+        - PatientController
+      summary: Obtener todos los pacientes
+      description: Recuperar un conjunto de todos los pacientes.
+      responses:
+        '200':
+          description: Un conjunto de pacientes
+
+  /patients/{id}:
+    get:
+      tags:
+        - PatientController
+      summary: Obtener un paciente por ID
+      description: Recuperar un paciente por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un objeto Paciente
+
+  /patients/nombre/{id}:
+    get:
+      tags:
+        - PatientController
+      summary: Obtener el nombre completo de un paciente por ID
+      description: Recuperar el nombre completo de un paciente por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El nombre completo del paciente
+
+  /patients/cedulas:
+    get:
+      tags:
+        - PatientController
+      summary: Obtener las cédulas de todos los pacientes
+      description: Recuperar una lista de las cédulas de todos los pacientes.
+      responses:
+        '200':
+          description: Una lista de cédulas de pacientes
+
+  /service-requests:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener solicitudes de servicio sin basedOn
+      description: Recuperar solicitudes de servicio donde basedOn es nulo.
+      responses:
+        '200':
+          description: Una lista de IDs de solicitudes de servicio
+    post:
+      tags:
+        - ServiceRequestController
+      summary: Crear una nueva solicitud de servicio
+      description: Crear una nueva solicitud de servicio con los detalles proporcionados.
+      requestBody:
+        description: Objeto ServiceRequest que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+      responses:
+        '200':
+          description: Solicitud de servicio creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /service-requests/{id}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener una solicitud de servicio por ID
+      description: Recuperar una solicitud de servicio por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un objeto ServiceRequest
+    put:
+      tags:
+        - ServiceRequestController
+      summary: Marcar una solicitud de servicio como completada
+      description: Marcar una solicitud de servicio como completada por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Solicitud de servicio marcada como completada
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /service-requests/id/fecha/{id}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener la fecha de una solicitud de servicio por ID
+      description: Recuperar la fecha de una solicitud de servicio por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: La fecha de la solicitud de servicio
+
+  /service-requests/patientId/{id}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener el ID del paciente de una solicitud de servicio por ID
+      description: Recuperar el ID del paciente de una solicitud de servicio por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El ID del paciente
+
+  /service-requests/status/{id}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener el estado de una solicitud de servicio por ID
+      description: Recuperar el estado de una solicitud de servicio por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El estado de la solicitud de servicio
+
+  /service-requests/fecha/{fecha}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener solicitudes de servicio desde una fecha específica
+      description: Recuperar solicitudes de servicio desde una fecha específica en adelante.
+      parameters:
+        - name: fecha
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un conjunto de solicitudes de servicio
+
+  /service-requests/fecha/id/{fecha}:
+    get:
+      tags:
+        - ServiceRequestController
+      summary: Obtener IDs de solicitudes de servicio desde una fecha específica
+      description: Recuperar IDs de solicitudes de servicio desde una fecha específica en adelante.
+      parameters:
+        - name: fecha
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Una lista de IDs de solicitudes de servicio
+
+  /practicioners:
+    put:
+      tags:
+        - PractitionerController
+      summary: Crear un nuevo practicante
+      description: Crear un nuevo practicante con los detalles proporcionados.
+      requestBody:
+        description: Objeto Practicante que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Practitioner'
+      responses:
+        '200':
+          description: Practicante creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      tags:
+        - PractitionerController
+      summary: Obtener todos los practicantes con cédula
+      description: Recuperar todos los practicantes que tienen cédula.
+      responses:
+        '200':
+          description: Una lista de practicantes
+
+  /practicioners/{id}:
+    get:
+      tags:
+        - PractitionerController
+      summary: Obtener un practicante por ID
+      description: Recuperar un practicante por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un objeto Practicante
+
+  /practicioners/nombre/{id}:
+    get:
+      tags:
+        - PractitionerController
+      summary: Obtener el nombre completo de un practicante por ID
+      description: Recuperar el nombre completo de un practicante por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El nombre completo del practicante
+
+  /practitioner-roles:
+    get:
+      tags:
+        - PractitionerRoleController
+      summary: Obtener disponibilidades
+      description: Recuperar disponibilidades de roles.
+      responses:
+        '200':
+          description: Una lista de disponibilidades de roles
+    post:
+      tags:
+        - PractitionerRoleController
+      summary: Crear un nuevo rol de practicante
+      description: Crear un nuevo rol de practicante con los detalles proporcionados.
+      requestBody:
+        description: Objeto PractitionerRole que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PractitionerRole'
+      responses:
+        '200':
+          description: Rol de practicante creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /practitioner-roles/rol/{id}:
+    get:
+      tags:
+        - PractitionerRoleController
+      summary: Obtener un rol de practicante por ID
+      description: Recuperar un rol de practicante por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un código de rol de practicante
+
+  /practitioner-roles/practitioners/{role}:
+    get:
+      tags:
+        - PractitionerRoleController
+      summary: Obtener practicantes con un rol específico
+      description: Recuperar practicantes con un rol específico.
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Un conjunto de practicantes
+
+  /practitioner-roles/disponibilidad/{id}:
+    get:
+      tags:
+        - PractitionerRoleController
+      summary: Obtener la disponibilidad de un practicante por ID
+      description: Recuperar la disponibilidad de un practicante por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: La disponibilidad del practicante
+
+  /practitioner-roles/id/{role}:
+    get:
+      tags:
+        - PractitionerRoleController
+      summary: Obtener IDs de practicantes con un rol específico
+      description: Recuperar IDs de practicantes con un rol específico.
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Una lista de IDs de practicantes
+
+  /locations:
+    put:
+      tags:
+        - LocationController
+      summary: Crear una nueva ubicación
+      description: Crear una nueva ubicación con los detalles proporcionados.
+      requestBody:
+        description: Objeto Ubicación que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '200':
+          description: Ubicación creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      tags:
+        - LocationController
+      summary: Obtener la disponibilidad de todas las ubicaciones
+      description: Recuperar la disponibilidad de todas las ubicaciones.
+      responses:
+        '200':
+          description: Una lista de la disponibilidad de las ubicaciones
+
+  /locations/{id}:
+    delete:
+      tags:
+        - LocationController
+      summary: Eliminar una ubicación por ID
+      description: Eliminar una ubicación por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ubicación eliminada exitosamente
+
+  /appointments:
+    post:
+      tags:
+        - AppointmentController
+      summary: Crear una nueva cita
+      description: Crear una nueva cita con los detalles proporcionados.
+      requestBody:
+        description: Objeto Cita que necesita ser agregado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Appointment'
+      responses:
+        '200':
+          description: Cita creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /appointments/aceptar/{id}:
+    get:
+      tags:
+        - AppointmentController
+      summary: Aceptar una cita
+      description: Aceptar una cita por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cita aceptada
+
+  /appointments/recomendadas:
+    get:
+      tags:
+        - AppointmentController
+      summary: Obtener citas recomendadas
+      description: Recuperar una lista de citas recomendadas.
+      responses:
+        '200':
+          description: Una lista de citas recomendadas
+
+  /appointments/{id}:
+    delete:
+      tags:
+        - AppointmentController
+      summary: Eliminar una cita por ID
+      description: Eliminar una cita por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cita eliminada exitosamente
+
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Patient
+        id:
+          type: string
+          example: 5313287-0
+        name:
+          type: array
+          items:
+            type: object
+            properties:
+              use:
+                type: string
+                example: official
+              family:
+                type: string
+                example: Doe
+              given:
+                type: array
+                items:
+                  type: string
+                  example: John
+        gender:
+          type: string
+          example: male
+        birthDate:
+          type: string
+          format: date
+          example: 1980-01-01
+
+    Bundle:
+      type: object
+      description: FHIR Bundle
+      properties:
+        resourceType:
+          type: string
+          example: Bundle
+        id:
+          type: string
+          example: 12345
+        type:
+          type: string
+          example: searchset
+        total:
+          type: integer
+          example: 1
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              fullUrl:
+                type: string
+                example: http://example.com/fhir/Patient/5313287-0
+              resource:
+                $ref: '#/components/schemas/Patient'
+
+    Practitioner:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Practitioner
+        id:
+          type: string
+          example: 5265071-4
+        name:
+          type: array
+          items:
+            type: object
+            properties:
+              use:
+                type: string
+                example: official
+              family:
+                type: string
+                example: Pintos
+              given:
+                type: array
+                items:
+                  type: string
+                  example: Lucas Mateo
+        gender:
+          type: string
+          example: male
+        birthDate:
+          type: string
+          format: date
+          example: 2002-12-06
+
+    ServiceRequest:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: ServiceRequest
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Patient/5313287-0
+        priority:
+          type: string
+          example: urgent
+        code:
+          type: object
+          properties:
+            concept:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: http://snomed.ct
+                      code:
+                        type: integer
+                        example: 11466000
+                text:
+                  type: string
+                  example: Operación cesárea
+        status:
+          type: string
+          example: on-hold
+        occurrenceTiming:
+          type: object
+          properties:
+            repeat:
+              type: object
+              properties:
+                duration:
+                  type: integer
+                  example: 2
+                durationUnit:
+                  type: string
+                  example: h
+        performerType:
+          type: object
+          properties:
+            coding:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                    example: http://snomed.ct
+                  code:
+                    type: integer
+                    example: 17561000
+                  display:
+                    type: string
+                    example: Cardiologo
+
+    PractitionerRole:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: PractitionerRole
+        practitioner:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Practitioner/5313287-5
+        code:
+          type: array
+          items:
+            type: object
+            properties:
+              coding:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                      example: http://example.org
+                    code:
+                      type: string
+                      example: MD
+        specialty:
+          type: array
+          items:
+            type: object
+            properties:
+              coding:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                      example: http://example.org
+                    code:
+                      type: string
+                      example: Medical doctor
+        active:
+          type: boolean
+          example: true
+        period:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date
+              example: 2023-01-01
+
+    Location:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Location
+        id:
+          type: string
+          example: Quirofano-1
+        status:
+          type: string
+          example: active
+        hoursOfOperation:
+          type: array
+          items:
+            type: object
+            properties:
+              period:
+                type: object
+                properties:
+                  start:
+                    type: string
+                    format: date-time
+                    example: 2024-01-01T00:00:00Z
+                  end:
+                    type: string
+                    format: date-time
+                    example: 2024-12-31T23:59:59Z
+              availableTime:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    daysOfWeek:
+                      type: array
+                      items:
+                        type: string
+                        example: mon
+                    allDay:
+                      type: boolean
+                      example: true
+              notAvailableTime:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                      example: No disponible por mantenimiento
+                    during:
+                      type: object
+                      properties:
+                        start:
+                          type: string
+                          format: date-time
+                          example: 2024-05-29T00:00:00Z
+                        end:
+                          type: string
+                          format: date-time
+                          example: 2024-05-30T00:00:00Z
+
+    Appointment:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Appointment
+        status:
+          type: string
+          example: proposed
+        priority:
+          type: string
+          example: routine
+        basedOn:
+          type: array
+          items:
+            type: object
+            properties:
+              reference:
+                type: string
+                example: ServiceRequest/556
+        serviceType:
+          type: array
+          items:
+            type: object
+            properties:
+              coding:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                      example: http://example.org/service-type
+                    code:
+                      type: string
+                      example: 123
+                    display:
+                      type: string
+                      example: Consulta general
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Patient/5313287-0
+        start:
+          type: string
+          format: date-time
+          example: 2024-06-01T09:00:00Z
+        end:
+          type: string
+          format: date-time
+          example: 2024-06-01T09:30:00Z
+        participant:
+          type: array
+          items:
+            type: object
+            properties:
+              actor:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/5313287-2
+        location:
+          type: array
+          items:
+            type: object
+            properties:
+              reference:
+                type: string
+                example: Location/Quirofano-1
